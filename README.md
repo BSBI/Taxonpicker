@@ -2,16 +2,17 @@
 
 This repo implements a bare-bones taxon picker widget
 
-*See also https://github.com/BSBI/taxonpicker*
+*See also https://github.com/BSBI/Taxonpicker*
 
 ## Getting started
 
 Clone this repository and install its dependencies:
 
 ```bash
-git clone https://github.com/BSBI/taxonpicker
+git clone https://github.com/BSBI/Taxonpicker
 cd taxonpicker
 npm install
+npm run build
 ```
 
 ## License
