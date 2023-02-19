@@ -310,6 +310,11 @@ export class TaxonPickerField extends FormField {
                 event.preventDefault();
                 this.inputChangeHandler(event);
 
+                // @todo this will need to change once highlighted selections are implemented
+                const dropDownEl = document.getElementById(this.#wrapperDivId);
+                dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
+
+                document.body.classList.remove('hide-controls');
 
                 // exit if no suggestions
                 // if (this.selectedIndex < 0 || !this.suggestionsCol) {
