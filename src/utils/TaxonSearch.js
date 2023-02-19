@@ -561,7 +561,7 @@ export class TaxonSearch {
             if (results.length === 1 && previous.length === 0 && taxonString.indexOf(' ') > 0) {
                 // try broadening result to genus level
 
-                const subString = taxonString.substring(0, query.indexOf(' ') - 1);
+                const subString = taxonString.substring(0, query.indexOf(' '));
 
                 results = this.lookup(subString, results);
             }
