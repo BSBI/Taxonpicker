@@ -1,6 +1,6 @@
 div.dropdown-list {
     display: none;
-    position: absolute;
+    position: relative; /* was absolute */
     background-color: white;
     width: 100%;
     padding: 0 1em 0 1em;
@@ -104,5 +104,9 @@ q.taxon-vernacular {
 
     span.pref-taxon-name {
         display: none;
+    }
+
+    div {
+        z-index: auto !important;
     }
 }
