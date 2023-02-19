@@ -676,6 +676,15 @@ export class TaxonSearch {
                         return a.vernacular.length < b.vernacular.length ? -1 : 1;
                     }
                 }
+
+                if (a.acceptedEntityId && !b.acceptedEntityId) {
+                    return -1;
+                }
+
+                if (b.acceptedEntityId && !a.acceptedEntityId) {
+                    return 1;
+                }
+
                 return a.uname < b.uname ? -1 : 1;
             });
 
