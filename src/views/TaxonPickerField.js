@@ -452,6 +452,14 @@ export class TaxonPickerField extends FormField {
             this.#triggerQuery(inputEl);
 
             dropDownWrapperEl.classList.add(CSS_DROPDOWN_FOCUSED);
+
+            if (this._value.taxonId && this._value.taxonName === inputEl.value && !this._value.vernacularMatch) {
+                const firstSpace = this._value.taxonName.indexOf(' ');
+
+                if (firstSpace > -1) {
+                    inputEl.setSelectionRange(firstSpace + 1, inputEl.value.length, 'backward');
+                }
+            }
         }
     }
 

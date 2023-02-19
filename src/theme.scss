@@ -121,6 +121,10 @@ q.taxon-vernacular {
     display: block;
     width: 90vw;
   }
+
+  span.pref-taxon-name {
+    display: none;
+  }
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
