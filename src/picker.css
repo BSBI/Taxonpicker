@@ -4,6 +4,7 @@ div.dropdown-list {
     width: 100%;
     padding: 0 1em 0 1em;
     z-index:10001;
+    position: absolute;
 }
 
 div.dropdown-wrapper {
@@ -84,7 +85,6 @@ q.taxon-vernacular {
         display: block;
         width: 60em;
         max-width: 95vw;
-        position: relative; /* was absolute */
     }
 }
 
@@ -98,7 +98,6 @@ q.taxon-vernacular {
     }
 
     div.dropdown-wrapper.dropdown-focused div.dropdown-list {
-        position: fixed;
         display: block;
         width: 90vw;
     }
