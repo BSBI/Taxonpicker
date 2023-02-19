@@ -542,7 +542,7 @@ export class TaxonPickerField extends FormField {
 
             document.body.classList.remove('hide-controls');
 
-            console.log('applied blur');
+            //console.log('applied blur');
 
         }, 500);
     }
@@ -593,16 +593,12 @@ export class TaxonPickerField extends FormField {
             return;
         }
 
-        //console.log('click handler');
-        //console.log(event);
-
         const targetEl = event.target.closest('a');
-        //console.log(targetEl);
 
         if (this.#changeEventTimeout) {
             clearTimeout(this.#changeEventTimeout);
             this.#changeEventTimeout = null;
-            console.log('cleared a pending change event');
+            //console.log('cleared a pending change event');
         }
 
         if (targetEl && targetEl.dataset.occurrenceid) {
@@ -611,8 +607,6 @@ export class TaxonPickerField extends FormField {
             //console.log(`got target ${targetEl.dataset.occurrenceid}`);
 
             const result = this.#searchResults[targetEl.dataset.resultnumber];
-
-            //document.getElementById(this.#inputFieldId).blur();
 
             if (result.acceptedEntityId && this.alwaysUseAcceptedName) {
                 // have a non-accepted result
@@ -676,9 +670,7 @@ export class TaxonPickerField extends FormField {
         // need to prevent race-conditions between clicks and change events
         // i.e. a click event on the dropdown list might come after a change event on the input field
 
-        event.stopPropagation(); // don't allow the change event to reach the form-level event handler (will handle it here instead)
-
-        //console.log('got taxon field input change event');
+        event.stopPropagation();
 
         if (this.#changeEventTimeout) {
             clearTimeout(this.#changeEventTimeout);
@@ -686,7 +678,7 @@ export class TaxonPickerField extends FormField {
 
         // avoid acting on a change immediately, in case there is a click event following
         this.#changeEventTimeout = setTimeout(() => {
-            console.log('processing taxon field input change event');
+            //console.log('processing taxon field input change event');
 
             const rawValue = document.getElementById(this.#inputFieldId).value;
             if (rawValue === '') {
@@ -701,7 +693,6 @@ export class TaxonPickerField extends FormField {
                 // apply immediate blur
                 const dropDownEl = document.getElementById(this.#wrapperDivId);
                 dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
-                console.log('applied blur immediately following change delay');
             } else {
 
                 // check if the dropdown list has an exact match, if so then use it
@@ -728,7 +719,7 @@ export class TaxonPickerField extends FormField {
                         }; // setter will refresh the field but not fire a change event
                     }
                 } else {
-                    console.log('no match');
+                    //console.log('no match');
 
                     this.value = {
                         taxonId: '',
@@ -737,8 +728,6 @@ export class TaxonPickerField extends FormField {
                     };
                 }
             }
-
-            //console.log(this._value);
 
             if (this.#previousId !== this._value.taxonId) {
                 this.#previousId = this._value.taxonId;

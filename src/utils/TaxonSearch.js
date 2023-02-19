@@ -360,6 +360,7 @@ export class TaxonSearch {
     /**
      *
      * @param {string} query
+     * @param {array} previous
      * @returns {Array.<{entityId: string,
                         vernacular: string,
                         qname: string,
@@ -377,7 +378,7 @@ export class TaxonSearch {
                         acceptedAuthority: string
                         }>}
      */
-    lookup(query) {
+    lookup(query, previous = []) {
         let results,
             taxonString,
             canonical,
@@ -556,6 +557,13 @@ export class TaxonSearch {
                     }
                 }
             }
+
+            if (results.length === 1 && previous === [] && query.indexOf(' ') > 0) {
+                // try broadening result to genus level
+
+                const subString = query.substring(0, query.indexOf(' ') - 1);
+                results = this.lookup(subString, results);
+            }
         } else {
             results = [];
         }
@@ -563,8 +571,8 @@ export class TaxonSearch {
         return results;
     }
 
-    compile_results(matchedIds, preferHybrids) {
-        const results = [];
+    compile_results(matchedIds, preferHybrids, previous = []) {
+        const results = previous || [];
 
         for (const id in matchedIds) {
             if (matchedIds.hasOwnProperty(id)) {
