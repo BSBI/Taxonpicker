@@ -573,7 +573,7 @@ export class TaxonSearch {
     }
 
     compile_results(matchedIds, preferHybrids, previous = []) {
-        const results = previous || [];
+        const results = [].concat(previous);
 
         for (const id in matchedIds) {
             if (matchedIds.hasOwnProperty(id)) {
