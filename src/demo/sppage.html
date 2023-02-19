@@ -131,17 +131,21 @@
                                 import taxa from "https://database.bsbi.org/js/atlasnames.mjs.php";
 
                                 Taxon.setTaxa(taxa);
+                                
                                 const taxonPicker = new TaxonPickerField;
-
                                 const taxonPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-container');
-                                // taxonPicker.setParams({
-                                //     label: 'taxon name',
-                                // });
-
                                 taxonPicker.addField(taxonPickerContainer);
 
                                 taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'taxon change event': taxonPicker.value});
+                                });
+
+                                const footerPicker = new TaxonPickerField;
+                                const footerPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-footer-container');
+                                footerPicker.addField(footerPickerContainer);
+
+                                footerPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
+                                    console.log({'footer taxon change event': taxonPicker.value});
                                 });
                             </script>
                         </div>
@@ -172,10 +176,11 @@
     <footer class="footer container" role="contentinfo">
         <div class="region region-footer">
             <section id="block-atlastaxonselectionblock-2" class="hidden-sm hidden-md hidden-lg block block-bsbi-atlas block-atlas-taxon-selection clearfix">
-
-
-
-                <div class="bsbi-atlas-taxon-selector-foo"></div><div class="bsbi-atlas-map-controls"></div><div class="bsbi-atlas-trend-controls"></div><div class="bsbi-atlas-phenology-controls"></div>
+                <div class="bsbi-atlas-taxon-selector-foo">
+                    <div id="bsbi-atlas-taxon-selector-footer-container" style="width: 100%"></div>
+                    <button class="atlas-taxon-selector-link btn btn-default" title="Copy link for taxon into clipboard">🔗</button>
+                </div>
+                <div class="bsbi-atlas-map-controls"></div><div class="bsbi-atlas-trend-controls"></div><div class="bsbi-atlas-phenology-controls"></div>
             </section>
 
             <section id="block-atlaspartnerlogoshorizontal" class="block block-bsbi-atlas block-atlas-partner-logos-horizontal clearfix">
