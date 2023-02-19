@@ -509,8 +509,9 @@ export class TaxonPickerField extends FormField {
             if (this.hangLeft) {
                 const dropDownEl = document.getElementById(this.#dropDownListDivId);
 
-                dropDownEl.style.right = `${inputEl.getBoundingClientRect()['right']}px`;
+                dropDownEl.style.right = '0';
                 dropDownEl.style.position = 'absolute';
+                dropDownEl.style.width = '24em';
             }
 
             if (this._value.taxonId && this._value.taxonName === inputEl.value && !this._value.vernacularMatch) {
