@@ -60,7 +60,7 @@ export class TaxonSearch {
      * @returns {string}
      */
     static formatter(taxonResult, queryString = '') {
-        const uname = taxonResult.uname.replace('/\bx\b/', '×');
+        const uname = taxonResult.uname.replace(/\bx\b/, '×');
 
         if (TaxonSearch.showVernacular) {
             if (taxonResult.vernacularMatched) {
