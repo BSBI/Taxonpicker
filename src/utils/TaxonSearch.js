@@ -55,11 +55,13 @@ export class TaxonSearch {
 
     /**
      *
-     * @param {object} taxonResult
+     * @param {{uname: string, qualifier: string, authority: string, vernacular: string, acceptedEntityId: string=, acceptedNameString: string=, acceptedQualifier: string=, vernacularMatched: boolean=}} taxonResult
      * @param {string} queryString
      * @returns {string}
      */
     static formatter(taxonResult, queryString = '') {
+        let uname = taxonResult.uname.replace('/\bx\b/', '');
+
         if (TaxonSearch.showVernacular) {
             if (taxonResult.vernacularMatched) {
                 if (taxonResult.acceptedEntityId) {
@@ -69,10 +71,10 @@ export class TaxonSearch {
                 return `<q><b>${taxonResult.vernacular}</b></q> <span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>`;
             }
             if (taxonResult.acceptedEntityId) {
-                return `<span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q><b>${taxonResult.vernacular}</b></q>` : ''
+                return `<span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''
                     } = <span class="italictaxon">${taxonResult.acceptedNameString}${taxonResult.acceptedQualifier ? ` <b>${taxonResult.acceptedQualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.acceptedAuthority}</span>`;
             }
-            return `<span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q><b>${taxonResult.vernacular}</b></q>` : ''}`;
+            return `<span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''}`;
         }
         if (taxonResult.acceptedEntityId) {
             return `<span class="italictaxon">${taxonResult.uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>` +

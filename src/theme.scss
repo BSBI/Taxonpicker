@@ -46,7 +46,7 @@ div.dropdown-list li {
   border-style: solid;
 }
 
-div.dropdown-list.dropdown-focused {
+div.dropdown-wrapper.dropdown-focused div.dropdown-list {
   display: block;
 }
 
@@ -98,6 +98,29 @@ span.taxauthority {
 q.taxon-vernacular {
   font-weight: bold;
   display: inline-block;
+}
+
+@media (min-width: 481px) {
+  div.dropdown-wrapper.dropdown-focused div.dropdown-list {
+    display: block;
+    width: 60em;
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 480px) {
+  div.dropdown-wrapper.dropdown-focused {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    padding: 5px;
+  }
+
+  div.dropdown-wrapper.dropdown-focused div.dropdown-list {
+    display: block;
+    width: 90vw;
+  }
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";

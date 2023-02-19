@@ -5,6 +5,7 @@ import {doubleClickIntercepted} from "../utils/stopDoubleClick";
 
 const CSS_UNRECOGNIZED_TAXON_CLASS = 'taxon-invalid';
 const CSS_UNRECOGNIZED_TAXON_CONTAINER_CLASS = 'taxon-unrecognized-container';
+const CSS_DROPDOWN_FOCUSED = 'dropdown-focused';
 
 export class TaxonPickerField extends FormField {
     /**
@@ -26,6 +27,11 @@ export class TaxonPickerField extends FormField {
      * @type {string}
      */
     #dropDownListUlId;
+
+    /**
+     * @type {string}
+     */
+    #wrapperDivId;
 
     /**
      * @type {string}
@@ -202,6 +208,7 @@ export class TaxonPickerField extends FormField {
 
         const wrapperEl = container.appendChild(document.createElement('div'));
         wrapperEl.className = 'dropdown-wrapper';
+        this.#wrapperDivId = wrapperEl.id = FormField.nextId;
 
         const inputField = wrapperEl.appendChild(document.createElement('input'));
         inputField.className = "form-control dropdown-input";
@@ -434,18 +441,18 @@ export class TaxonPickerField extends FormField {
     focusHandler(event) {
         console.log('focused');
 
-        const dropDownEl = document.getElementById(this.#dropDownListDivId);
+        const dropDownWrapperEl = document.getElementById(this.#wrapperDivId);
 
         //const container = document.getElementById(this.#containerId);
 
-        if (!dropDownEl.classList.contains('dropdown-focused')) {
+        if (!dropDownWrapperEl.classList.contains(CSS_DROPDOWN_FOCUSED)) {
             // refresh dropdown list when first focused
             // focus event will re-fire after click on link in dropdown potentially disrupting subsequent click
             // it is important that the query is not re-run if already focused.
             const inputEl = document.getElementById(this.#inputFieldId);
             this.#triggerQuery(inputEl);
 
-            dropDownEl.classList.add('dropdown-focused');
+            dropDownWrapperEl.classList.add(CSS_DROPDOWN_FOCUSED);
         }
     }
 
@@ -462,8 +469,8 @@ export class TaxonPickerField extends FormField {
 
         // to avoid blurring before a link click has been processed, introduce a delay
         setTimeout(() => {
-            const dropDownEl = document.getElementById(this.#dropDownListDivId);
-            dropDownEl.classList.remove('dropdown-focused');
+            const dropDownEl = document.getElementById(this.#wrapperDivId);
+            dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
             console.log('applied blur');
 
         }, 500);
