@@ -42,6 +42,7 @@
         <link rel="stylesheet" media="all" href="/themes/custom/bsbi/css/style.css?rq62ws" />
 
 
+        <link rel="stylesheet" href="https://database.bsbi.org/dev/Taxonpicker/public/taxonpicker.__BSBI_APP_VERSION__.css">
     </head>
 <body class="path-atlas has-glyphicons">
 <a href="#main-content" class="visually-hidden focusable skip-link">
@@ -126,6 +127,24 @@
                         <div class="bsbi-atlas-taxon-selector-demo" style="display: flex; width: 100%">
                             <div id="bsbi-atlas-taxon-selector-container" style="width: 100%"></div>
                             <button class="atlas-taxon-selector-link btn btn-default" title="Copy link for taxon into clipboard">🔗</button>
+                            <script type="module">
+                                import {TaxonPickerField, Taxon} from "../dist/esm/taxonpicker.mjs";
+                                import taxa from "https://database.bsbi.org/js/atlasnames.mjs.php";
+
+                                Taxon.setTaxa(taxa);
+                                const taxonPicker = new TaxonPickerField;
+
+                                const taxonPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-container');
+                                // taxonPicker.setParams({
+                                //     label: 'taxon name',
+                                // });
+
+                                taxonPicker.addField(taxonPickerContainer);
+
+                                taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
+                                    console.log({'taxon change event': taxonPicker.value});
+                                });
+                            </script>
                         </div>
                         <div class="bsbi-atlas-map-controls"></div><div class="bsbi-atlas-trend-controls"></div><div class="bsbi-atlas-phenology-controls"></div>
                     </section>

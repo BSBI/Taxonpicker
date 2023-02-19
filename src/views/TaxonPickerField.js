@@ -201,10 +201,13 @@ export class TaxonPickerField extends FormField {
         unrecognizedWarningEl.id = this.#unrecognizedWarningElId = FormField.nextId;
         unrecognizedWarningEl.className = CSS_UNRECOGNIZED_TAXON_CONTAINER_CLASS;
         unrecognizedWarningEl.textContent = "The name that you have typed hasn't been matched. If possible please pick an entry from the drop-down list of suggestions.";
+        unrecognizedWarningEl.display = 'none';
 
-        const labelEl = container.appendChild(document.createElement('label'));
-        labelEl.htmlFor = this.#inputFieldId;
-        labelEl.textContent = this.label;
+        if (this.label) {
+            const labelEl = container.appendChild(document.createElement('label'));
+            labelEl.htmlFor = this.#inputFieldId;
+            labelEl.textContent = this.label;
+        }
 
         const wrapperEl = container.appendChild(document.createElement('div'));
         wrapperEl.className = 'dropdown-wrapper';
