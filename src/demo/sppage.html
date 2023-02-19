@@ -1,69 +1,205 @@
-
 <!DOCTYPE html>
-<html  lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
-<head>
-    <meta charset="utf-8" />
-    <meta name="Generator" content="Drupal 9 (https://www.drupal.org)" />
-    <meta name="MobileOptimized" content="width" />
-    <meta name="HandheldFriendly" content="true" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base>https://dev-brc-plantatlas9.pantheonsite.io/atlas/</base>
-    <link rel="icon" href="/themes/custom/bsbi/favicon.ico" type="image/vnd.microsoft.icon" />
+    <html  lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="Generator" content="Drupal 9 (https://www.drupal.org)" />
+        <meta name="MobileOptimized" content="width" />
+        <meta name="HandheldFriendly" content="true" />
+        <base href="https://dev-brc-plantatlas9.pantheonsite.io/atlas/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/themes/custom/bsbi/favicon.ico" type="image/vnd.microsoft.icon" />
 
-    <title>Site under maintenance | PlantAtlas</title>
-    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_UsFvNi1fb_wTmqmfIi0TisAX1sgqvnR4zfx4-ImrlME.css" />
-    <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
-    <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/@unicorn-fail/drupal-bootstrap-styles@0.0.2/dist/3.4.0/8.x-3.x/drupal-bootstrap.min.css" integrity="sha512-tGFFYdzcicBwsd5EPO92iUIytu9UkQR3tLMbORL9sfi/WswiHkA1O3ri9yHW+5dXk18Rd+pluMeDBrPKSwNCvw==" crossorigin="anonymous" />
-    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_QdoxzT4m3lbuecjMIJHVlPI7d65dk8pPL1eEc7cuu1A.css" />
+        <title>PlantAtlas</title>
+        <link rel="stylesheet" media="all" href="/modules/custom/bsbi_atlas/css/bsbi-atlas-general.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/brc-vis-drupal/css/leaflet.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/brc-vis-drupal/css/brcvis-drupal.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/brc-vis-drupal/css/brcatlas.umd.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/brc-vis-drupal/css/brccharts.umd.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/bsbi_atlas/css/bsbi-atlas.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/bsbi_atlas/css/bootstrap-select.min.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/modules/custom/bsbi_atlas/css/lightgallery-bundle.min.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/align.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/fieldgroup.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/container-inline.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/clearfix.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/details.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/hidden.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/item-list.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/js.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/nowrap.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/position-container.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/progress.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/reset-appearance.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/resize.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/sticky-header.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-counter.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-counters.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-general-info.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/tablesort.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="/core/modules/system/css/components/tree-child.module.css?rq62ws" />
+        <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.css" integrity="sha256-0XAFLBbK7DgQ8t7mRWU5BF2OMm9tjtfH945Z7TTeNIo=" crossorigin="anonymous" />
+        <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/@unicorn-fail/drupal-bootstrap-styles@0.0.2/dist/3.4.0/8.x-3.x/drupal-bootstrap.css" integrity="sha512-j4mdyNbQqqp+6Q/HtootpbGoc2ZX0C/ktbXnauPFEz7A457PB6le79qasOBVcrSrOBtGAm0aVU2SOKFzBl6RhA==" crossorigin="anonymous" />
+        <link rel="stylesheet" media="all" href="/themes/custom/bsbi/css/style.css?rq62ws" />
 
 
-</head>
-<body class="maintenance-page path-frontpage page-node-type-page has-glyphicons">
+    </head>
+<body class="path-atlas has-glyphicons">
 <a href="#main-content" class="visually-hidden focusable skip-link">
     Skip to main content
 </a>
 
 <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
-    <header  class="navbar navbar-default container" id="navbar" role="banner">
-        <div class="container">
-            <div class="row">
-                <section class="col-sm-12">
-                    <div class="navbar-header">
-                        <a class="logo navbar-btn pull-left" href="/index.php/" title="Home" rel="home">
-                            <img src="/themes/custom/bsbi/logo.svg" alt="Home" />
-                        </a>
+    <header class="navbar navbar-default container" id="navbar" role="banner">
+        <div class="navbar-header">
+            <div class="region region-navigation">
+                <a class="logo navbar-btn pull-left" href="/" title="Home" rel="home">
+                    <img src="/themes/custom/bsbi/logo.svg" alt="Home" />
+                </a>
+                <a class="name navbar-brand" href="/" title="Home" rel="home">PlantAtlas</a>
 
-                        <a class="name navbar-brand" href="/index.php/" title="Home" rel="home">PlantAtlas</a>
-                    </div>
-                </section>
             </div>
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div id="navbar-collapse" class="navbar-collapse collapse">
+            <div class="region region-navigation-collapsible">
+                <nav role="navigation" aria-labelledby="block-bsbi-main-menu-menu" id="block-bsbi-main-menu">
+                    <h2 class="sr-only" id="block-bsbi-main-menu-menu">Main navigation</h2>
+
+
+                    <ul class="menu menu--main nav navbar-nav">
+                        <li class="first">
+                            <a href="/" data-drupal-link-system-path="&lt;front&gt;">Home</a>
+                        </li>
+                        <li>
+                            <a href="/atlas" data-drupal-link-system-path="atlas">Atlas</a>
+                        </li>
+                        <li>
+                            <a href="/background" title="Background to the Atlas 2020 project" data-drupal-link-system-path="node/3">Background</a>
+                        </li>
+                        <li class="last">
+                            <a href="/acknowledgements" title="Acknowledgements for the Atlas 2020 project" data-drupal-link-system-path="node/4">Acknowledgements</a>
+                        </li>
+                    </ul>
+
+
+                </nav>
+                <nav role="navigation" aria-labelledby="block-bsbi-account-menu-menu" id="block-bsbi-account-menu">
+                    <h2 class="sr-only" id="block-bsbi-account-menu-menu">User account menu</h2>
+
+
+                    <ul class="menu menu--account nav navbar-nav navbar-right">
+                        <li class="first last">
+                            <a href="/user/login" data-drupal-link-system-path="user/login">Log in</a>
+                        </li>
+                    </ul>
+
+
+                </nav>
+
+            </div>
+
         </div>
     </header>
 
-    <main role="main" class="main-container container">
+    <div role="main" class="main-container container js-quickedit-main-content">
         <div class="row">
-            <section class="col-sm-12">
-                <h1>Site under maintenance</h1>
+
+            <div class="col-sm-12" role="heading">
+                <div class="region region-header">
+                    <div data-drupal-messages-fallback class="hidden"></div>
+
+
+                </div>
+
+            </div>
+
+            <aside class="col-sm-3" role="complementary">
+                <div class="region region-sidebar-first">
+                    <section id="block-atlastaxonselectionblock" class="hidden-xs block block-bsbi-atlas block-atlas-taxon-selection clearfix">
+
+
+
+                        <div class="bsbi-atlas-taxon-selector"></div><div class="bsbi-atlas-map-controls"></div><div class="bsbi-atlas-trend-controls"></div><div class="bsbi-atlas-phenology-controls"></div>
+                    </section>
+
+
+                </div>
+
+            </aside>
+
+            <section class="col-sm-9">
+
+
+
 
                 <a id="main-content"></a>
-                PlantAtlas is currently under construction. The live site will be launched in March 2023. Thank you for your patience.
+                <div class="region region-content">
+                    <div id="bsbi-atlas-gui"></div>
+
+                </div>
+
             </section>
+
         </div>
-    </main>
+    </div>
+
+    <footer class="footer container" role="contentinfo">
+        <div class="region region-footer">
+            <section id="block-atlastaxonselectionblock-2" class="hidden-sm hidden-md hidden-lg block block-bsbi-atlas block-atlas-taxon-selection clearfix">
+
+
+
+                <div class="bsbi-atlas-taxon-selector"></div><div class="bsbi-atlas-map-controls"></div><div class="bsbi-atlas-trend-controls"></div><div class="bsbi-atlas-phenology-controls"></div>
+            </section>
+
+            <section id="block-atlaspartnerlogoshorizontal" class="block block-bsbi-atlas block-atlas-partner-logos-horizontal clearfix">
+
+
+
+                <img alt="Botanical Society of Britain &amp; Ireland logo" src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/images/BSBI-logo.gif" class="partner-logo-horizontal" /><img alt="UK Centre for Ecology &amp; Hydrology logo" src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/images/UKCEH-logo.png" class="partner-logo-horizontal" /><img alt="Biological Records Centre logo" src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/images/BRC-logo.png" class="partner-logo-horizontal" />
+            </section>
+
+
+        </div>
+
+    </footer>
 
 </div>
 
 
-<script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/index.php\/","scriptPath":null,"pathPrefix":"","currentPath":"node\/1","currentPathIsAdmin":false,"isFront":true,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"user":{"uid":0,"permissionsHash":"9d4214730439efd89603aa4be87f8094de12754c3601690f16000ff8c77c0069"}}</script>
-<script src="https://plantatlas2020.org/core/assets/vendor/jquery/jquery.min.js?v=3.6.3"></script>
-<script src="https://plantatlas2020.org/core/assets/vendor/underscore/underscore-min.js?v=1.13.6"></script>
-<script src="https://plantatlas2020.org/core/misc/drupalSettingsLoader.js?v=9.5.3"></script>
-<script src="https://plantatlas2020.org/core/misc/drupal.js?v=9.5.3"></script>
-<script src="https://plantatlas2020.org/core/misc/drupal.init.js?v=9.5.3"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-<script src="https://plantatlas2020.org/themes/composer/bootstrap/js/drupal.bootstrap.js?rq63mq"></script>
-<script src="https://plantatlas2020.org/themes/composer/bootstrap/js/attributes.js?rq63mq"></script>
-<script src="https://plantatlas2020.org/themes/composer/bootstrap/js/theme.js?rq63mq"></script>
+<script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","scriptPath":null,"pathPrefix":"","currentPath":"atlas\/2cd4p9h.ffy","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"bootstrap":{"forms_has_error_value_toggle":1,"modal_animation":1,"modal_backdrop":"true","modal_focus_input":1,"modal_keyboard":1,"modal_select_text":1,"modal_show":1,"modal_size":"","popover_enabled":1,"popover_animation":1,"popover_auto_close":1,"popover_container":"body","popover_content":"","popover_delay":"0","popover_html":0,"popover_placement":"right","popover_selector":"","popover_title":"","popover_trigger":"click","tooltip_enabled":1,"tooltip_animation":1,"tooltip_container":"body","tooltip_delay":"0","tooltip_html":0,"tooltip_placement":"auto left","tooltip_selector":"","tooltip_trigger":"hover"},"bsbi_atlas":{"useTabs":true,"dataRoot":"\/sites\/default\/files\/bsbi_data\/","dataBsbidb":"","dataImagesurl":"","identifier":"2cd4p9h.ffy"},"user":{"uid":0,"permissionsHash":"d12ea24695a6b2b3bb05873f007a59c07e2101c8219a3837cc7ab3f4baf35aaf"}}</script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/core/assets/vendor/jquery/jquery.min.js?v=3.6.3"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/core/assets/vendor/underscore/underscore-min.js?v=1.13.6"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/core/misc/drupalSettingsLoader.js?v=9.5.3"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/core/misc/drupal.js?v=9.5.3"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/core/misc/drupal.init.js?v=9.5.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.js" integrity="sha256-29KjXnLtx9a95INIGpEvHDiqV/qydH2bBx0xcznuA6I=" crossorigin="anonymous"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/themes/composer/bootstrap/js/drupal.bootstrap.js?rq62ws"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/themes/composer/bootstrap/js/attributes.js?rq62ws"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/themes/composer/bootstrap/js/theme.js?rq62ws"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/bsbi-atlas-gen-min.umd.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/themes/composer/bootstrap/js/popover.js?rq62ws"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/themes/composer/bootstrap/js/tooltip.js?rq62ws"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/d3.v5.min.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/brcvis-drupal.umd.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/autoComplete.min.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/leaflet.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/brcatlas.min.umd.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/brc-vis-drupal/js/brccharts.min.umd.js?v=1.x"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/bootstrap-select.min.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/bsbi-atlas-min.umd.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/jscolor.min.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/lightgallery.umd.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/lg-thumbnail.umd.js?v=1.1"></script>
+<script src="https://dev-brc-plantatlas9.pantheonsite.io/modules/custom/bsbi_atlas/js/lg-zoom.umd.js?v=1.1"></script>
 
 </body>
 </html>
+
