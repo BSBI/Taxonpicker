@@ -118,7 +118,7 @@ q.taxon-vernacular {
         display: none;
     }
 
-    p.taxon-picker-type-prompt {
+    div.list-group p.taxon-picker-type-prompt {
         color: darkgreen;
         padding: 3px;
         font-weight: bolder;
