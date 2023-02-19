@@ -215,6 +215,7 @@ export class TaxonPickerField extends FormField {
         inputField.id = this.#inputFieldId;
         inputField.autocomplete = 'off';
         inputField.spellcheck = false;
+        inputField.type = 'search';
 
         if (this.validationMessage) {
             // unfortunately the validation message has to be placed immediately after the input field
@@ -568,25 +569,42 @@ export class TaxonPickerField extends FormField {
         this.#changeEventTimeout = setTimeout(() => {
             console.log('processing taxon field input change event');
 
-            // check if the dropdown list has an exact match, if so then use it
-            const exactMatch = this.#searchResults.find((result) => {
-                return result.exact;
-            });
+            const rawValue = document.getElementById(this.#inputFieldId).value;
+            if (rawValue === '') {
+                // value is blank, probably after x button clicked
 
-            if (exactMatch) {
-                console.log('exact match');
-                this.value = {
-                    taxonId: exactMatch.entityId,
-                    taxonName: exactMatch.vernacularMatched ? exactMatch.vernacular : exactMatch.qname,
-                    vernacularMatch: exactMatch.vernacularMatched
-                }; // setter will refresh the field but not fire a change event
+                // clear taxon result lookup timeout
+                if (this.#taxonLookupTimeoutHandle) {
+                    clearTimeout(this.#taxonLookupTimeoutHandle);
+                    this.#taxonLookupTimeoutHandle = null;
+                }
+
+                // apply immediate blur
+                const dropDownEl = document.getElementById(this.#wrapperDivId);
+                dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
+                console.log('applied blur immediately following change delay');
             } else {
-                console.log('no match');
-                this.value = {
-                    taxonId: '',
-                    taxonName: document.getElementById(this.#inputFieldId).value.trim(),
-                    vernacularMatch: null
-                };
+
+                // check if the dropdown list has an exact match, if so then use it
+                const exactMatch = this.#searchResults.find((result) => {
+                    return result.exact;
+                });
+
+                if (exactMatch) {
+                    console.log('exact match');
+                    this.value = {
+                        taxonId: exactMatch.entityId,
+                        taxonName: exactMatch.vernacularMatched ? exactMatch.vernacular : exactMatch.qname,
+                        vernacularMatch: exactMatch.vernacularMatched
+                    }; // setter will refresh the field but not fire a change event
+                } else {
+                    console.log('no match');
+                    this.value = {
+                        taxonId: '',
+                        taxonName: document.getElementById(this.#inputFieldId).value.trim(),
+                        vernacularMatch: null
+                    };
+                }
             }
 
             console.log(this._value);
