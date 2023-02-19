@@ -308,6 +308,12 @@ export class TaxonPickerField extends FormField {
         switch (event.key) {
             case 'Enter':
                 event.preventDefault();
+
+                if (this.#taxonLookupTimeoutHandle) {
+                    clearTimeout(this.#taxonLookupTimeoutHandle);
+                    this.#taxonLookupTimeoutHandle = null;
+                }
+
                 this.inputChangeHandler(event);
 
                 // @todo this will need to change once highlighted selections are implemented
@@ -315,6 +321,7 @@ export class TaxonPickerField extends FormField {
                 dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
 
                 document.body.classList.remove('hide-controls');
+                document.getElementById(this.#inputFieldId).blur();
 
                 // exit if no suggestions
                 // if (this.selectedIndex < 0 || !this.suggestionsCol) {
