@@ -105,6 +105,13 @@ export default [
 								.replaceAll('__BSBI_APP_VERSION__', version)
 					},
 					{
+						src: 'src/demo/atlashome.html',
+						dest: 'public',
+						transform: (contents) =>
+							contents.toString()
+								.replaceAll('__BSBI_APP_VERSION__', version)
+					},
+					{
 						src: 'src/picker.css',
 						dest: 'public'
 					},
