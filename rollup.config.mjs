@@ -104,6 +104,10 @@ export default [
 							contents.toString()
 								.replaceAll('__BSBI_APP_VERSION__', version)
 					},
+					{
+						src: 'src/picker.css',
+						dest: 'public'
+					},
 					// {
 					// 	src: 'src/app.css',
 					// 	dest: 'public/appcss',
