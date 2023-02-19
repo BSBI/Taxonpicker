@@ -2,9 +2,10 @@ div.dropdown-list {
     display: none;
     background-color: white;
     width: 100%;
-    padding: 0 0 0 1em;
+    padding: 3px 1em 0 0;
     z-index:10001;
     position: absolute;
+    box-shadow: 16px 16px 10px black;
 }
 
 div.dropdown-wrapper {
