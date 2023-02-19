@@ -98,6 +98,7 @@ q.taxon-vernacular {
     }
 
     div.dropdown-wrapper.dropdown-focused div.dropdown-list {
+        position: fixed;
         display: block;
         width: 90vw;
     }
@@ -106,7 +107,9 @@ q.taxon-vernacular {
         display: none;
     }
 
+    /*
     div {
         z-index: auto !important;
     }
+    */
 }
