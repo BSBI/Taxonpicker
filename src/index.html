@@ -45,6 +45,10 @@
 	});
 
 	taxonPicker.addField(taxonPickerContainer);
+
+	taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
+		console.log({'taxon change event': taxonPicker.value});
+	});
 </script>
 
 </body>

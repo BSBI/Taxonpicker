@@ -185,14 +185,6 @@ export class TaxonPickerField extends FormField {
      * @returns {void}
      */
     buildField() {
-    //    <div class="form-group">
-    //     <label for="exampleFormControlInput1">Email address</label>
-    //     <div class="dropbox-wrapper">
-    //     <input type="text" class="form-control dropbox-input" id="exampleFormControlInput1" placeholder="name@example.com">
-    //     <div class="dropdown-list">
-    //     </div>
-    //   </div>
-
         const container = document.createElement('div');
         container.className = 'form-group mb-3';
         this.#containerId = container.id = FormField.nextId;
@@ -236,7 +228,6 @@ export class TaxonPickerField extends FormField {
         }
 
         inputField.addEventListener('keydown', this.keydownHandler.bind(this));
-        //inputField.addEventListener('keyup', this.keyupHandler.bind(this)); // unfortunately keyup doesn't fire for touch keyboards
         inputField.addEventListener('input', this.inputHandler.bind(this));
         inputField.addEventListener('change', this.inputChangeHandler.bind(this));
 
@@ -473,7 +464,7 @@ export class TaxonPickerField extends FormField {
         setTimeout(() => {
             const dropDownEl = document.getElementById(this.#dropDownListDivId);
             dropDownEl.classList.remove('dropdown-focused');
-            // console.log('applied blur');
+            console.log('applied blur');
 
         }, 500);
     }
