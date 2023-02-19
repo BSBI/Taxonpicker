@@ -440,15 +440,13 @@ export class TaxonPickerField extends FormField {
      * @param {Event} event
      */
     focusHandler(event) {
-        console.log('focused');
+       console.log('focused');
 
-        const dropDownWrapperEl = document.getElementById(this.#wrapperDivId);
+       const dropDownWrapperEl = document.getElementById(this.#wrapperDivId);
 
-        //const container = document.getElementById(this.#containerId);
-
-        if (!dropDownWrapperEl.classList.contains(CSS_DROPDOWN_FOCUSED)) {
-            // refresh dropdown list when first focused
-            // focus event will re-fire after click on link in dropdown potentially disrupting subsequent click
+       if (!dropDownWrapperEl.classList.contains(CSS_DROPDOWN_FOCUSED)) {
+            // Refresh dropdown list when first focused.
+            // The focus event will re-fire after click on link in dropdown potentially disrupting subsequent click
             // it is important that the query is not re-run if already focused.
             const inputEl = document.getElementById(this.#inputFieldId);
             this.#triggerQuery(inputEl);
@@ -503,7 +501,8 @@ export class TaxonPickerField extends FormField {
             //
             // dropdownListEl.innerHTML = `<ul id="${this.#dropDownListUlId}">${htmlResults.join('')}</ul>`;
         } else {
-            dropdownListEl.innerHTML = '';
+            dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p>Start typing the name of a taxon.</p></div>`;
+            //dropdownListEl.innerHTML = '';
         }
 
         this.#selectedIndex = null;
