@@ -123,18 +123,19 @@
             <aside class="col-sm-3" role="complementary">
                 <div class="region region-sidebar-first">
                     <section id="block-atlastaxonselectionblock" class="hidden-xs block block-bsbi-atlas block-atlas-taxon-selection clearfix">
-                        <div class="bsbi-atlas-taxon-selector-demo" style="display: flex; width: 100%">
+                        <div class="bsbi-atlas-taxon-selector-demo" style="display: flex; width: 100%; margin-bottom: 14px;">
                             <div id="bsbi-atlas-taxon-selector-container" style="width: 100%"></div>
                             <button class="atlas-taxon-selector-link btn btn-default" title="Copy link for taxon into clipboard">🔗</button>
                             <script type="module">
                                 import {TaxonPickerField, Taxon} from "https://database.bsbi.org/dev/Taxonpicker/dist/esm/taxonpicker.mjs";
                                 import taxa from "https://database.bsbi.org/js/atlasnames.mjs.php";
 
-                                Taxon.setTaxa(taxa);
+                                Taxon.setTaxa(taxa); // must be called before picker initialization
 
                                 const taxonPicker = new TaxonPickerField;
                                 const taxonPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-container');
                                 taxonPicker.addField(taxonPickerContainer);
+                                taxonPicker.setTaxonFromId('2cd4p9h.xt1'); // Poa annua
 
                                 taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'taxon change event': taxonPicker.value});
@@ -143,6 +144,7 @@
                                 const footerPicker = new TaxonPickerField;
                                 const footerPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-footer-container');
                                 footerPicker.addField(footerPickerContainer);
+                                footerPicker.setTaxonFromId('2cd4p9h.xt1'); // Poa annua
 
                                 footerPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'footer taxon change event': taxonPicker.value});
@@ -176,7 +178,7 @@
     <footer class="footer container" role="contentinfo">
         <div class="region region-footer">
             <section id="block-atlastaxonselectionblock-2" class="hidden-sm hidden-md hidden-lg block block-bsbi-atlas block-atlas-taxon-selection clearfix">
-                <div class="bsbi-atlas-taxon-selector-foo" style="display: flex; width: 100%">
+                <div class="bsbi-atlas-taxon-selector-demo" style="display: flex; width: 100%; margin-bottom: 14px;">
                     <div id="bsbi-atlas-taxon-selector-footer-container" style="width: 100%"></div>
                     <button class="atlas-taxon-selector-link btn btn-default" title="Copy link for taxon into clipboard">🔗</button>
                 </div>

@@ -69,6 +69,12 @@ export class TaxonPickerField extends FormField {
     alwaysUseAcceptedName = true;
 
     /**
+     *
+     * @type {boolean}
+     */
+    allowTaxonMismatches = false;
+
+    /**
      * @type {Array.<{entityId: string,
                         vernacular: string,
                         qname: string,
@@ -80,10 +86,11 @@ export class TaxonPickerField extends FormField {
                         exact: boolean,
                         near: boolean,
                         formatted: string,
-                        acceptedEntityId: string,
-                        acceptedNameString: string,
-                        acceptedQualifier: string,
-                        acceptedAuthority: string
+                        acceptedEntityId: string=,
+                        acceptedNameString: string=,
+                        acceptedQualifier: string=,
+                        acceptedAuthority: string=,
+                        acceptedQname: string=,
                         }>}
      */
     #searchResults = [];
@@ -161,6 +168,12 @@ export class TaxonPickerField extends FormField {
 
             const inputEl = document.getElementById(this.#inputFieldId);
             inputEl.value = this._value.taxonName;
+
+            if (this._value.taxonId) {
+
+            } else {
+                inputEl.title = "Search for a taxon.";
+            }
 
             this._lastInputValue = this._value.taxonName; // probably not necessary
 
@@ -571,14 +584,49 @@ export class TaxonPickerField extends FormField {
 
             //document.getElementById(this.#inputFieldId).blur();
 
-            this.value = {
-                taxonId: result.entityId,
-                taxonName: result.vernacularMatched ? result.vernacular : result.qname,
-                vernacularMatch: result.vernacularMatched
-            }; // setter will refresh the field but not fire a change event
+            if (result.acceptedEntityId && this.alwaysUseAcceptedName) {
+                // have a non-accepted result
+
+                this.value = {
+                    taxonId: result.acceptedEntityId,
+                    taxonName: result.acceptedQname,
+                    vernacularMatch: false
+                };
+            } else {
+                this.value = {
+                    taxonId: result.entityId,
+                    taxonName: result.vernacularMatched ? result.vernacular : result.qname,
+                    vernacularMatch: result.vernacularMatched
+                }; // setter will refresh the field but not fire a change event
+            }
 
             this.fireEvent(FormField.EVENT_CHANGE);
         }
+    }
+
+    /**
+     * Sets taxon picker value using a taxon entity id
+     * refreshes view
+     * *does not* trigger change event
+     *
+     * @param {string} taxonId
+     * @throws TaxonError
+     */
+    setTaxonFromId(taxonId) {
+        let taxon = Taxon.fromId(taxonId);
+        if (taxon.acceptedEntityId) {
+            taxon = Taxon.fromId(taxon.acceptedEntityId);
+        }
+
+        const qname = taxon.nameString + (taxon.qualifier ? (` ${taxon.qualifier}`) : '');
+
+        this.value = {
+            taxonId: taxon.id,
+            taxonName: qname,
+            vernacularMatch: false
+        };
+
+        this.updateView();
     }
 
     inputChangeHandler (event) {
@@ -587,7 +635,7 @@ export class TaxonPickerField extends FormField {
 
         event.stopPropagation(); // don't allow the change event to reach the form-level event handler (will handle it here instead)
 
-        console.log('got taxon field input change event');
+        //console.log('got taxon field input change event');
 
         if (this.#changeEventTimeout) {
             clearTimeout(this.#changeEventTimeout);
@@ -619,17 +667,29 @@ export class TaxonPickerField extends FormField {
                 });
 
                 if (exactMatch) {
-                    console.log('exact match');
-                    this.value = {
-                        taxonId: exactMatch.entityId,
-                        taxonName: exactMatch.vernacularMatched ? exactMatch.vernacular : exactMatch.qname,
-                        vernacularMatch: exactMatch.vernacularMatched
-                    }; // setter will refresh the field but not fire a change event
+                    //console.log('exact match');
+
+                    if (exactMatch.acceptedEntityId && this.alwaysUseAcceptedName) {
+                        // have a non-accepted result
+
+                        this.value = {
+                            taxonId: exactMatch.acceptedEntityId,
+                            taxonName: exactMatch.acceptedQname,
+                            vernacularMatch: false
+                        };
+                    } else {
+                        this.value = {
+                            taxonId: exactMatch.entityId,
+                            taxonName: exactMatch.vernacularMatched ? exactMatch.vernacular : exactMatch.qname,
+                            vernacularMatch: exactMatch.vernacularMatched
+                        }; // setter will refresh the field but not fire a change event
+                    }
                 } else {
                     console.log('no match');
+
                     this.value = {
                         taxonId: '',
-                        taxonName: document.getElementById(this.#inputFieldId).value.trim(),
+                        taxonName: this.allowTaxonMismatches ? document.getElementById(this.#inputFieldId).value.trim() : '',
                         vernacularMatch: null
                     };
                 }

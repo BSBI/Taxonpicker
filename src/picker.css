@@ -2,7 +2,7 @@ div.dropdown-list {
     display: none;
     background-color: white;
     width: 100%;
-    padding: 0 1em 0 1em;
+    padding: 0 0 0 1em;
     z-index:10001;
     position: absolute;
 }
@@ -85,6 +85,7 @@ q.taxon-vernacular {
         display: block;
         width: 60em;
         max-width: 95vw;
+        margin-left: 0;
     }
 }
 

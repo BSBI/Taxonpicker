@@ -43,9 +43,9 @@ export class TaxonSearch {
      */
     static showVernacular = true;
 
-    static MIN_SEARCH_LENGTH = 2;
+    static MIN_SEARCH_LENGTH = 1;
 
-    static MAXIMUM_RESULTS = 25;
+    static MAXIMUM_RESULTS = 20;
 
     constructor() {
         if (!Taxon.rawTaxa) {
@@ -600,6 +600,7 @@ export class TaxonSearch {
                         row.acceptedNameString = acceptedTaxon[TaxonSearch.nameStringColumn];
                         row.acceptedQualifier = acceptedTaxon[TaxonSearch.qualifierColumn];
                         row.acceptedAuthority = acceptedTaxon[TaxonSearch.authorityColumn];
+                        row.acceptedQname = row.acceptedNameString + (row.acceptedQualifier ? (` ${row.acceptedQualifier}`) : '');
                     }
 
                     results.push(row);
