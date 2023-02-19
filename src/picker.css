@@ -1,6 +1,5 @@
 div.dropdown-list {
     display: none;
-    position: relative; /* was absolute */
     background-color: white;
     width: 100%;
     padding: 0 1em 0 1em;
@@ -85,6 +84,7 @@ q.taxon-vernacular {
         display: block;
         width: 60em;
         max-width: 95vw;
+        position: relative; /* was absolute */
     }
 }
 
@@ -107,9 +107,7 @@ q.taxon-vernacular {
         display: none;
     }
 
-    /*
-    div {
-        z-index: auto !important;
+    body.hide-controls div.bsbi-atlas-map-controls {
+        display: none;
     }
-    */
 }

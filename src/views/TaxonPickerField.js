@@ -461,6 +461,8 @@ export class TaxonPickerField extends FormField {
 
             dropDownWrapperEl.classList.add(CSS_DROPDOWN_FOCUSED);
 
+           document.body.classList.add('hide-controls');
+
             if (this._value.taxonId && this._value.taxonName === inputEl.value && !this._value.vernacularMatch) {
                 const firstSpace = this._value.taxonName.indexOf(' ');
 
@@ -486,6 +488,9 @@ export class TaxonPickerField extends FormField {
         setTimeout(() => {
             const dropDownEl = document.getElementById(this.#wrapperDivId);
             dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
+
+            document.body.classList.remove('hide-controls');
+
             console.log('applied blur');
 
         }, 500);
