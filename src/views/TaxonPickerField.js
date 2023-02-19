@@ -112,6 +112,12 @@ export class TaxonPickerField extends FormField {
         vernacularMatch: false
     };
 
+    /**
+     *
+     * @type {string}
+     */
+    #previousId = '';
+
     static timeoutDelay = 50;
 
     /**
@@ -178,7 +184,12 @@ export class TaxonPickerField extends FormField {
             inputEl.value = this._value.taxonName;
 
             if (this._value.taxonId) {
+                const taxon = Taxon.fromId(this._value.taxonId);
 
+                inputEl.title = taxon.nameString +
+                    (taxon.qualifier ? (` ${taxon.qualifier}`) : '') +
+                    (taxon.authority ? (` ${taxon.authority}`) : '') +
+                    (taxon.vernacular ? ` “${taxon.vernacular}”` : '');
             } else {
                 inputEl.title = "Search for a taxon.";
             }
@@ -610,7 +621,10 @@ export class TaxonPickerField extends FormField {
             }
 
 
-            this.fireEvent(FormField.EVENT_CHANGE);
+            if (this.#previousId !== this._value.taxonId) {
+                this.#previousId = this._value.taxonId;
+                this.fireEvent(FormField.EVENT_CHANGE);
+            }
         }
     }
 
@@ -644,6 +658,7 @@ export class TaxonPickerField extends FormField {
             };
         }
 
+        this.#previousId = this._value.taxonId;
         this.updateView();
     }
 
@@ -713,8 +728,12 @@ export class TaxonPickerField extends FormField {
                 }
             }
 
-            console.log(this._value);
-            this.fireEvent(FormField.EVENT_CHANGE);
+            //console.log(this._value);
+
+            if (this.#previousId !== this._value.taxonId) {
+                this.#previousId = this._value.taxonId;
+                this.fireEvent(FormField.EVENT_CHANGE);
+            }
         }, 500);
     }
 }
