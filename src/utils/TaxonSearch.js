@@ -677,12 +677,13 @@ export class TaxonSearch {
                     }
                 }
 
+                // prefer accepted (n.b. acceptedEntityId is only set for synonyms)
                 if (a.acceptedEntityId && !b.acceptedEntityId) {
-                    return -1;
+                    return 1;
                 }
 
                 if (b.acceptedEntityId && !a.acceptedEntityId) {
-                    return 1;
+                    return -1;
                 }
 
                 return a.uname < b.uname ? -1 : 1;
