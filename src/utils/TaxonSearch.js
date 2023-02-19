@@ -435,7 +435,7 @@ export class TaxonSearch {
                     }
                 }
 
-                results = this.compile_results(matchedIds, preferHybrids);
+                results = this.compile_results(matchedIds, preferHybrids, previous);
             } else {
                 // genus is not abbreviated
 
@@ -489,7 +489,7 @@ export class TaxonSearch {
                         }
                     }
 
-                    results = this.compile_results(matchedIds, preferHybrids);
+                    results = this.compile_results(matchedIds, preferHybrids, previous);
                 } else {
                     const caseInsensitiveEscapedTaxonRegex = new RegExp(strictEscapedTaxonString, 'i');
 
@@ -525,7 +525,7 @@ export class TaxonSearch {
                         }
                     }
 
-                    results = this.compile_results(matchedIds, preferHybrids);
+                    results = this.compile_results(matchedIds, preferHybrids, previous);
 
                     /**
                      * if very few matches then retry searching using much fuzzier matching
@@ -553,15 +553,16 @@ export class TaxonSearch {
                             }
                         }
 
-                        results = this.compile_results(matchedIds, preferHybrids);
+                        results = this.compile_results(matchedIds, preferHybrids, previous);
                     }
                 }
             }
 
-            if (results.length === 1 && previous === [] && query.indexOf(' ') > 0) {
+            if (results.length === 1 && previous.length === 0 && taxonString.indexOf(' ') > 0) {
                 // try broadening result to genus level
 
-                const subString = query.substring(0, query.indexOf(' ') - 1);
+                const subString = taxonString.substring(0, query.indexOf(' ') - 1);
+
                 results = this.lookup(subString, results);
             }
         } else {
