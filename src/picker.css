@@ -90,7 +90,7 @@ q.taxon-vernacular {
 
 @media (max-width: 480px) {
     div.dropdown-wrapper.dropdown-focused {
-        position: absolute;
+        position: fixed;
         top: 0px;
         left: 0px;
         width: 100vw;
