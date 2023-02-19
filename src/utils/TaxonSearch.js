@@ -633,7 +633,7 @@ export class TaxonSearch {
                     // logger('exact test a: ' + a.uname + ' vs ' + b.uname);
                     // logger(b);
                     if (b.exact) {
-                        return a.acceptedEntityId ? 1 : 0; // prefer accepted name
+                        return a.acceptedEntityId ? 1 : -1; // prefer accepted name
                     }
                     return -1;
 
