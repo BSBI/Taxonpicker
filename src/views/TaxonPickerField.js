@@ -60,6 +60,8 @@ export class TaxonPickerField extends FormField {
      */
     _lastInputValue = '';
 
+    unrecognizedWarningText = "" // was "The name that you have typed hasn't been matched. If possible please pick an entry from the drop-down list of suggestions.";
+
     /**
      * @type {Array.<{entityId: string,
                         vernacular: string,
@@ -158,14 +160,16 @@ export class TaxonPickerField extends FormField {
 
             const unrecognizedWarningEl = document.getElementById(this.#unrecognizedWarningElId);
 
-            if (this._value.taxonName) {
-                if (this._value.taxonId) {
-                    unrecognizedWarningEl.classList.remove(CSS_UNRECOGNIZED_TAXON_CLASS);
+            if (unrecognizedWarningEl) {
+                if (this._value.taxonName) {
+                    if (this._value.taxonId) {
+                        unrecognizedWarningEl.classList.remove(CSS_UNRECOGNIZED_TAXON_CLASS);
+                    } else {
+                        unrecognizedWarningEl.classList.add(CSS_UNRECOGNIZED_TAXON_CLASS);
+                    }
                 } else {
-                    unrecognizedWarningEl.classList.add(CSS_UNRECOGNIZED_TAXON_CLASS);
+                    unrecognizedWarningEl.classList.remove(CSS_UNRECOGNIZED_TAXON_CLASS);
                 }
-            } else {
-                unrecognizedWarningEl.classList.remove(CSS_UNRECOGNIZED_TAXON_CLASS);
             }
         }
     }
@@ -197,11 +201,12 @@ export class TaxonPickerField extends FormField {
 
         this.#inputFieldId = FormField.nextId;
 
-        const unrecognizedWarningEl = container.appendChild(document.createElement('p'));
-        unrecognizedWarningEl.id = this.#unrecognizedWarningElId = FormField.nextId;
-        unrecognizedWarningEl.className = CSS_UNRECOGNIZED_TAXON_CONTAINER_CLASS;
-        unrecognizedWarningEl.textContent = "The name that you have typed hasn't been matched. If possible please pick an entry from the drop-down list of suggestions.";
-        unrecognizedWarningEl.display = 'none';
+        if (this.unrecognizedWarningText) {
+            const unrecognizedWarningEl = container.appendChild(document.createElement('p'));
+            unrecognizedWarningEl.id = this.#unrecognizedWarningElId = FormField.nextId;
+            unrecognizedWarningEl.className = CSS_UNRECOGNIZED_TAXON_CONTAINER_CLASS;
+            unrecognizedWarningEl.textContent = this.unrecognizedWarningText;
+        }
 
         if (this.label) {
             const labelEl = container.appendChild(document.createElement('label'));
