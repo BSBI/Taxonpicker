@@ -623,18 +623,26 @@ export class TaxonPickerField extends FormField {
      * @throws TaxonError
      */
     setTaxonFromId(taxonId) {
-        let taxon = Taxon.fromId(taxonId);
-        if (taxon.acceptedEntityId) {
-            taxon = Taxon.fromId(taxon.acceptedEntityId);
+        if (taxonId) {
+            let taxon = Taxon.fromId(taxonId);
+            if (taxon.acceptedEntityId) {
+                taxon = Taxon.fromId(taxon.acceptedEntityId);
+            }
+
+            const qname = taxon.nameString + (taxon.qualifier ? (` ${taxon.qualifier}`) : '');
+
+            this.value = {
+                taxonId: taxon.id,
+                taxonName: qname,
+                vernacularMatch: false
+            };
+        } else {
+            this.value = {
+                taxonId: '',
+                taxonName: '',
+                vernacularMatch: null
+            };
         }
-
-        const qname = taxon.nameString + (taxon.qualifier ? (` ${taxon.qualifier}`) : '');
-
-        this.value = {
-            taxonId: taxon.id,
-            taxonName: qname,
-            vernacularMatch: false
-        };
 
         this.updateView();
     }

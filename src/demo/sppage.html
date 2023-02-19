@@ -139,6 +139,13 @@
 
                                 taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'taxon change event': taxonPicker.value});
+
+                                    // alternative taxon picker needs to stay in sync
+                                    footerPicker.setTaxonFromId(taxonPicker.value.taxonId);
+
+                                    // do something to refresh the view, either change taxon or full page refresh
+                                    // e.g.
+                                    document.getElementById('bsbi-caption').innerHTML = taxonPicker.value.taxonName;
                                 });
 
                                 const footerPicker = new TaxonPickerField;
@@ -148,6 +155,13 @@
 
                                 footerPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'footer taxon change event': taxonPicker.value});
+
+                                    // alternative taxon picker needs to stay in sync
+                                    taxonPicker.setTaxonFromId(footerPicker.value.taxonId);
+
+                                    // do something to refresh the view, either change taxon or full page refresh
+                                    // e.g.
+                                    document.getElementById('bsbi-caption').innerHTML = taxonPicker.value.taxonName;
                                 });
                             </script>
                         </div>
