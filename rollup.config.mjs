@@ -97,6 +97,13 @@ export default [
 								//.replaceAll('__PATH__', path)
 								//.replaceAll('__SUPPORT_EMAIL__', supportEmail)
 					},
+					{
+						src: 'src/demo/sppage.html',
+						dest: 'public',
+						transform: (contents) =>
+							contents.toString()
+								.replaceAll('__BSBI_APP_VERSION__', version)
+					},
 					// {
 					// 	src: 'src/app.css',
 					// 	dest: 'public/appcss',
