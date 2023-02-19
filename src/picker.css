@@ -117,4 +117,10 @@ q.taxon-vernacular {
     body.hide-controls div.bsbi-atlas-map-controls {
         display: none;
     }
+
+    p.taxon-picker-type-prompt {
+        color: darkgreen;
+        padding: 3px;
+        font-weight: bolder;
+    }
 }

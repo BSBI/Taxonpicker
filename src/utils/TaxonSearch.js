@@ -286,6 +286,12 @@ export class TaxonSearch {
      * @returns {string}
      */
     static normaliseTaxonName(taxonString) {
+        taxonString = taxonString
+            .replace(/[×✕]/ug, ' x ')
+            .replace(/\s+/ug, ' ')
+            .trim()
+        ;
+
         for (let i = 0, l = TaxonSearch.taxonRankNameSearchRegex.length; i < l; i++) {
             taxonString = taxonString.replace(TaxonSearch.taxonRankNameSearchRegex[i], TaxonSearch.taxonRankNameReplacement[i]);
         }

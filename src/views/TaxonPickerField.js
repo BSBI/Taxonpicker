@@ -75,6 +75,12 @@ export class TaxonPickerField extends FormField {
     allowTaxonMismatches = false;
 
     /**
+     *
+     * @type {boolean}
+     */
+    hideSensuStricto = true;
+
+    /**
      * @type {Array.<{entityId: string,
                         vernacular: string,
                         qname: string,
@@ -128,10 +134,12 @@ export class TaxonPickerField extends FormField {
             // this will trigger an error if somehow an invalid id was supplied
             taxon = Taxon.fromId(taxonSpec.taxonId);
 
+            const qname = taxon.nameString + (taxon.qualifier ? (` ${taxon.qualifier}`) : '');
+
             // build the saved values from the dictionary rather than from the literal user entry (which may use different formatting)
             this._value = {
                 taxonId: taxon.id,
-                taxonName: taxonSpec.vernacularMatch ? taxon.vernacular : taxon.nameString,
+                taxonName: taxonSpec.vernacularMatch ? taxon.vernacular : qname,
                 vernacularMatch: taxonSpec.vernacularMatch
             };
         } else {
@@ -243,6 +251,7 @@ export class TaxonPickerField extends FormField {
         inputField.autocomplete = 'off';
         inputField.spellcheck = false;
         inputField.type = 'search';
+        inputField.placeholder = 'Search for a taxon';
 
         if (this.validationMessage) {
             // unfortunately the validation message has to be placed immediately after the input field
@@ -543,7 +552,7 @@ export class TaxonPickerField extends FormField {
             //
             // dropdownListEl.innerHTML = `<ul id="${this.#dropDownListUlId}">${htmlResults.join('')}</ul>`;
         } else {
-            dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p>Start typing the name of a taxon.</p></div>`;
+            dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p class="taxon-picker-type-prompt">Start typing the name of a taxon.</p></div>`;
             //dropdownListEl.innerHTML = '';
         }
 
@@ -599,6 +608,7 @@ export class TaxonPickerField extends FormField {
                     vernacularMatch: result.vernacularMatched
                 }; // setter will refresh the field but not fire a change event
             }
+
 
             this.fireEvent(FormField.EVENT_CHANGE);
         }
