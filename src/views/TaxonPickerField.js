@@ -63,6 +63,12 @@ export class TaxonPickerField extends FormField {
     unrecognizedWarningText = "" // was "The name that you have typed hasn't been matched. If possible please pick an entry from the drop-down list of suggestions.";
 
     /**
+     *
+     * @type {boolean}
+     */
+    alwaysUseAcceptedName = true;
+
+    /**
      * @type {Array.<{entityId: string,
                         vernacular: string,
                         qname: string,
@@ -448,7 +454,7 @@ export class TaxonPickerField extends FormField {
      * @param {Event} event
      */
     focusHandler(event) {
-       console.log('focused');
+       //console.log('focused');
 
        const dropDownWrapperEl = document.getElementById(this.#wrapperDivId);
 
@@ -461,7 +467,9 @@ export class TaxonPickerField extends FormField {
 
             dropDownWrapperEl.classList.add(CSS_DROPDOWN_FOCUSED);
 
-           document.body.classList.add('hide-controls');
+            // kludgy work-around for a z-index problem on mobile
+            // buttons pop-through the dropdown list, so temporarily hide them all
+            document.body.classList.add('hide-controls');
 
             if (this._value.taxonId && this._value.taxonName === inputEl.value && !this._value.vernacularMatch) {
                 const firstSpace = this._value.taxonName.indexOf(' ');

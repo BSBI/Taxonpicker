@@ -106,6 +106,10 @@ q.taxon-vernacular {
         display: none;
     }
 
+    body.hide-controls {
+        overflow: hidden;
+    }
+
     body.hide-controls div.bsbi-atlas-map-controls {
         display: none;
     }
