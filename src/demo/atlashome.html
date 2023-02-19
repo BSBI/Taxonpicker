@@ -184,6 +184,9 @@
                 Taxon.setTaxa(taxa); // must be called before picker initialization
 
                 const taxonPicker = new TaxonPickerField;
+
+                taxonPicker.hangLeft = true; // picker is at right-hand-side, so drop-down should trail left
+
                 const taxonPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-container');
                 taxonPicker.addField(taxonPickerContainer);
                 taxonPicker.setTaxonFromId('2cd4p9h.xt1'); // Poa annua

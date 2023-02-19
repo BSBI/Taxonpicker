@@ -74,11 +74,13 @@ export class TaxonPickerField extends FormField {
      */
     allowTaxonMismatches = false;
 
-    /**
-     *
-     * @type {boolean}
-     */
-    hideSensuStricto = true;
+    // /**
+    //  *
+    //  * @type {boolean}
+    //  */
+    // hideSensuStricto = true;
+
+    hangLeft = false;
 
     /**
      * @type {Array.<{entityId: string,
@@ -503,6 +505,13 @@ export class TaxonPickerField extends FormField {
             // kludgy work-around for a z-index problem on mobile
             // buttons pop-through the dropdown list, so temporarily hide them all
             document.body.classList.add('hide-controls');
+
+            if (this.hangLeft) {
+                const dropDownEl = document.getElementById(this.#dropDownListDivId);
+
+                dropDownEl.style.right = `${inputEl.getBoundingClientRect()['right']}px`;
+                dropDownEl.style.position = 'absolute';
+            }
 
             if (this._value.taxonId && this._value.taxonName === inputEl.value && !this._value.vernacularMatch) {
                 const firstSpace = this._value.taxonName.indexOf(' ');
