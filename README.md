@@ -2,8 +2,6 @@
 
 This repo implements a bare-bones taxon picker widget
 
-*See also https://github.com/BSBI/Taxonpicker*
-
 ## Getting started
 
 Clone this repository and install its dependencies:
