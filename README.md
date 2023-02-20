@@ -10,7 +10,7 @@ Clone this repository and install its dependencies:
 
 ```bash
 git clone https://github.com/BSBI/Taxonpicker
-cd taxonpicker
+cd Taxonpicker
 npm install
 npm run build
 ```
