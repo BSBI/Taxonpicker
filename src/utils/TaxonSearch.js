@@ -64,7 +64,7 @@ export class TaxonSearch {
     static formatter(taxonResult, queryString = '') {
         const uname = taxonResult.uname
             .replace(/\bx\b/g, '×')
-            .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">\\1</span>')
+            .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">$1</span>')
             ;
 
         if (TaxonSearch.showVernacular) {
