@@ -48,7 +48,7 @@
   <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/@unicorn-fail/drupal-bootstrap-styles@0.0.2/dist/3.4.0/8.x-3.x/drupal-bootstrap.css" integrity="sha512-j4mdyNbQqqp+6Q/HtootpbGoc2ZX0C/ktbXnauPFEz7A457PB6le79qasOBVcrSrOBtGAm0aVU2SOKFzBl6RhA==" crossorigin="anonymous" />
   <link rel="stylesheet" media="all" href="/themes/custom/bsbi/css/style.css?rq62ws" />
 
-  <link rel="stylesheet" href="https://database.bsbi.org/dev/Taxonpicker/public/picker.css">
+  <link rel="stylesheet" href="https://atlasimages.bsbi.org/taxonpicker/picker.css">
 
 </head>
 <body class="path-frontpage page-node-type-page has-glyphicons">
@@ -178,8 +178,8 @@
             <div class="bsbi-atlas-taxon-selector-demo">
               <div id="bsbi-atlas-taxon-selector-container" style="width: 100%"></div>
               <script type="module">
-                import {TaxonPickerField, Taxon} from "https://database.bsbi.org/dev/Taxonpicker/dist/esm/taxonpicker.mjs";
-                import taxa from "https://database.bsbi.org/js/atlasnames.mjs.php";
+                import {TaxonPickerField, Taxon} from "https://atlasimages.bsbi.org/taxonpicker/taxonpicker.mjs";
+                import taxa from "https://atlasimages.bsbi.org/taxonpicker/atlasnames.mjs";
 
                 Taxon.setTaxa(taxa); // must be called before picker initialization
 
