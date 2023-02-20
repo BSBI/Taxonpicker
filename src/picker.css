@@ -33,6 +33,10 @@ div.dropdown-wrapper.dropdown-focused div.dropdown-list {
     display: block;
 }
 
+span.rank-name {
+    font-style: normal;
+}
+
 /*
 div.card div.card-invalid-feedback, div.accordion-item div.card-invalid-feedback {
   display: none;

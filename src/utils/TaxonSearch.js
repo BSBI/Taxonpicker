@@ -4,6 +4,8 @@
 
 import {Taxon} from '../models/Taxon';
 
+const RANK_DISPLAY_NAMES = /\b(subg\.|sect\.|subsect\.|ser\.|group|subsp\.|morph\.|var\.|nothovar\.|f\.|nothosubsp\.|pv\.)/g;
+
 export class TaxonSearch {
 
     /**
@@ -60,8 +62,11 @@ export class TaxonSearch {
      * @returns {string}
      */
     static formatter(taxonResult, queryString = '') {
-        const uname = taxonResult.uname.replace(/\bx\b/g, '×');
-
+        const uname = taxonResult.uname
+            .replace(/\bx\b/g, '×')
+            .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">\1</span>')
+            ;
+        
         if (TaxonSearch.showVernacular) {
             if (taxonResult.vernacularMatched) {
                 if (taxonResult.acceptedEntityId) {
