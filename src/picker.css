@@ -77,8 +77,9 @@ span.taxon-qualifier {
     font-weight: bolder;
 }
 
-span.taxon-qualifier.latin {
+span.taxon-qualifier-latin {
     font-style: italic;
+    font-weight: bolder;
 }
 
 span.taxauthority {

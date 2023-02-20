@@ -67,7 +67,7 @@ export class TaxonSearch {
             .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">$1</span>')
             ;
 
-        const qualifier = `<span class="taxon-qualifier${taxonResult.qualifier === 's.s.' || taxonResult.qualifier === 's.l.' ? ' latin' : ''}">${taxonResult.qualifier}</span>`;
+        const qualifier = `<span class="taxon-qualifier${taxonResult.qualifier === 's.s.' || taxonResult.qualifier === 's.l.' ? '-latin' : ''}">${taxonResult.qualifier}</span>`;
 
         if (TaxonSearch.showVernacular) {
             if (taxonResult.vernacularMatched) {
