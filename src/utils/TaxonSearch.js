@@ -493,6 +493,9 @@ export class TaxonSearch {
                 } else {
                     const caseInsensitiveEscapedTaxonRegex = new RegExp(strictEscapedTaxonString, 'i');
 
+                    // strictVernacularRegex allows flexible string and hyphen interchange
+                    const strictVernacularRegex = new RegExp(strictEscapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
+
                     for (let id in Taxon.rawTaxa) {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
                         let testTaxon = Taxon.rawTaxa[id];
@@ -515,8 +518,11 @@ export class TaxonSearch {
                             };
                         } else if (
                             !testTaxon[TaxonSearch.badVernacularColumn] &&
-                            (caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularColumn]) ||
-                            caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
+                            (strictVernacularRegex.test(testTaxon[TaxonSearch.vernacularColumn]) ||
+                                strictVernacularRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
+                            // !testTaxon[TaxonSearch.badVernacularColumn] &&
+                            // (caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularColumn]) ||
+                            // caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
                         ) {
                             matchedIds[id] = {
                                 exact: (testTaxon[TaxonSearch.vernacularColumn] === taxonString),
@@ -531,7 +537,11 @@ export class TaxonSearch {
                      * if very few matches then retry searching using much fuzzier matching
                      */
                     if (results.length < 5) {
-                        const broadRegExp = new RegExp(`\\b${escapedTaxonString}.*`, 'i'); // match anywhere in string
+
+                        const spaceTolerantTaxonString = escapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
+
+                        //const broadRegExp = new RegExp(`\\b${escapedTaxonString}.*`, 'i'); // match anywhere in string
+                        const broadRegExp = new RegExp(`\\b${spaceTolerantTaxonString}.*`, 'i'); // match anywhere in string
 
                         for (let id in Taxon.rawTaxa) {
                             // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
