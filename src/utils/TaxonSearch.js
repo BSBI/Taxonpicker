@@ -67,29 +67,37 @@ export class TaxonSearch {
             .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">$1</span>')
             ;
 
+        const qualifier = `<span class="taxon-qualifier${taxonResult.qualifier === 's.s.' || taxonResult.qualifier === 's.l.' ? ' latin' : ''}">${taxonResult.qualifier}</span>`;
+
         if (TaxonSearch.showVernacular) {
             if (taxonResult.vernacularMatched) {
                 if (taxonResult.acceptedEntityId) {
-                    return `<q><b>${taxonResult.vernacular}</b></q> <span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>` +
+                    return `<q><b>${taxonResult.vernacular}</b></q> <span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>` +
                         `<span class="pref-taxon-name"> = <span class="italictaxon">${taxonResult.acceptedNameString}${taxonResult.acceptedQualifier ? ` <b>${taxonResult.acceptedQualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.acceptedAuthority}</span></span>`;
                 }
-                return `<q><b>${taxonResult.vernacular}</b></q> <span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>`;
+                return `<q><b>${taxonResult.vernacular}</b></q> <span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>`;
             }
             if (taxonResult.acceptedEntityId) {
-                const acceptedNameString = taxonResult.acceptedNameString.replace('/\bx\b/', '×');
+                const acceptedNameString = taxonResult.acceptedNameString
+                    .replace('/\bx\b/', '×')
+                    .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">$1</span>')
+                ;
 
-                return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''
+                return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''
                 }<span class="pref-taxon-name"> = <span class="italictaxon">${acceptedNameString}${taxonResult.acceptedQualifier ? ` <b>${taxonResult.acceptedQualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.acceptedAuthority}</span></span>`;
             }
-            return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''}`;
+            return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>${taxonResult.vernacular ? ` <q class="taxon-vernacular"><b>${taxonResult.vernacular}</b></q>` : ''}`;
         }
         if (taxonResult.acceptedEntityId) {
-            const acceptedNameString = taxonResult.acceptedNameString.replace('/\bx\b/', '×');
+            const acceptedNameString = taxonResult.acceptedNameString
+                .replace('/\bx\b/', '×')
+                .replace(RANK_DISPLAY_NAMES, '<span class="rank-name">$1</span>')
+            ;
 
-            return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>` +
+            return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>` +
                 `<span class="pref-taxon-name"> = <span class="italictaxon">${acceptedNameString}${taxonResult.acceptedQualifier ? ` <b>${taxonResult.acceptedQualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.acceptedAuthority}</span></span>`;
         }
-        return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` <b>${taxonResult.qualifier}</b>` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>`;
+        return `<span class="italictaxon">${uname}${taxonResult.qualifier ? ` ${qualifier}` : ''}</span> <span class="taxauthority">${taxonResult.authority}</span>`;
     }
 
     static abbreviatedGenusRegex = /^(X\s+)?([a-z])[.\s]+(.*?)$/i;

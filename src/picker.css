@@ -72,9 +72,13 @@ span.italictaxon {
     display: inline-block;
 }
 
-span.taxon-qualifier {
+.taxon-qualifier {
     font-style: normal;
     font-weight: bolder;
+}
+
+.taxon-qualifier .latin {
+    font-style: italic;
 }
 
 span.taxauthority {
