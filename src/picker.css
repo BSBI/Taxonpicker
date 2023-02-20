@@ -72,12 +72,12 @@ span.italictaxon {
     display: inline-block;
 }
 
-.taxon-qualifier {
+span.taxon-qualifier {
     font-style: normal;
     font-weight: bolder;
 }
 
-.taxon-qualifier .latin {
+span.taxon-qualifier.latin {
     font-style: italic;
 }
 
