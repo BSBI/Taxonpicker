@@ -586,7 +586,7 @@ export class TaxonSearch {
 
                 const subString = taxonString.substring(0, query.indexOf(' '));
 
-                results = this.lookup(subString, results);
+                results = results.concat(this.lookup(subString, results));
 
                 const entityList = [];
 
