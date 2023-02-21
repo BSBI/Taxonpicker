@@ -163,5 +163,35 @@ export default [
 			commonjs(), // converts npm packages to ES modules
 			terser()
 		]
+	},
+	{
+		input: 'src/index.js',
+		output: {
+			file: 'dist/umd/taxonpicker.min.umd.js',
+			format: 'umd',
+			exports: "named",
+			sourcemap: true,
+			name: 'taxonpicker'
+		},
+		//external: ['bootstrap/js/dist/modal'], // @todo these should be dropped if possible
+
+		plugins: [
+			resolve(), // tells Rollup how to find files in node_modules
+			replace({
+				preventAssignment: true,
+				values: {
+					BSBI_APP_VERSION: version,
+				},
+			}),
+			string({
+				// Required to be specified
+				include: "**/*.html",
+
+				// Undefined by default
+				exclude: ["**/index.html"]
+			}),
+			commonjs(), // converts npm packages to ES modules
+			terser()
+		]
 	}
 	];
