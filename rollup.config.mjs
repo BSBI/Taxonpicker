@@ -7,7 +7,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import del from 'rollup-plugin-delete';
 import scss from 'rollup-plugin-scss';
-//import { terser } from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 //import sourcemaps from 'rollup-plugin-sourcemaps';
 //import json from '@rollup/plugin-json';
 
@@ -134,7 +134,7 @@ export default [
 			// }),
 			commonjs(), // converts npm packages to ES modules
 			//production && terser() // minify, but only in production
-			//terser()
+			terser()
 		]
 	},
 	];
