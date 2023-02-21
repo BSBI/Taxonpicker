@@ -598,6 +598,9 @@ export class TaxonSearch {
                         entityList.push(results[n].entityId);
                     }
                 }
+
+                // reindex results;
+                results = results.filter(_ => true);
             }
         } else {
             results = [];
