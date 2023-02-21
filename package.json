@@ -30,6 +30,7 @@
     "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-string": "^3.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
     "sass": "^1.58.1"
   },
   "dependencies": {

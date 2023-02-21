@@ -7,7 +7,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import del from 'rollup-plugin-delete';
 import scss from 'rollup-plugin-scss';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 //import sourcemaps from 'rollup-plugin-sourcemaps';
 //import json from '@rollup/plugin-json';
 
@@ -64,7 +64,7 @@ export default [
 			exports: "named",
 			sourcemap: true
 		},
-		external: ['bootstrap/js/dist/modal'], // @todo these should be dropped if possible
+		//external: ['bootstrap/js/dist/modal'], // @todo these should be dropped if possible
 
 		plugins: [
 			del(
@@ -133,8 +133,35 @@ export default [
 			// 	babelHelpers: 'runtime' // building library rather than app
 			// }),
 			commonjs(), // converts npm packages to ES modules
-			//production && terser() // minify, but only in production
-			terser()
 		]
 	},
+	{
+		input: 'src/index.js',
+		output: {
+			file: 'dist/esm/taxonpicker.min.mjs',
+			format: 'esm',
+			exports: "named",
+			sourcemap: true
+		},
+		//external: ['bootstrap/js/dist/modal'], // @todo these should be dropped if possible
+
+		plugins: [
+			resolve(), // tells Rollup how to find files in node_modules
+			replace({
+				preventAssignment: true,
+				values: {
+					BSBI_APP_VERSION: version,
+				},
+			}),
+			string({
+				// Required to be specified
+				include: "**/*.html",
+
+				// Undefined by default
+				exclude: ["**/index.html"]
+			}),
+			commonjs(), // converts npm packages to ES modules
+			terser()
+		]
+	}
 	];
