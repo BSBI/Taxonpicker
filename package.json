@@ -1,13 +1,13 @@
 {
   "name": "taxonpicker",
   "title": "BSBI Taxon Picker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Tom Humphrey",
     "email": "tom.humphrey@bsbi.org"
   },
-  "main": "dist/taxonpicker.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/umd/taxonpicker.min.umd.js",
+  "module": "dist/esm/taxonpicker.min.mjs.js",
   "sideEffects": false,
   "devDependencies": {
     "@babel/core": "^7.20.12",
