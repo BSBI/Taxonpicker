@@ -399,9 +399,13 @@ export class TaxonSearch {
             preferHybrids
             ;
 
+        const decodedString = decodeURIComponent(query).trim();
+
         // ignore trailing ' x' from string which would just muck up result matching
-        taxonString = TaxonSearch.normaliseTaxonName(decodeURIComponent(query).trim()).replace(/\s+x$/i, '');
+        taxonString = TaxonSearch.normaliseTaxonName(decodedString).replace(/\s+x$/i, '');
         preferHybrids = / x\b/.test(taxonString);
+
+        let vernacularString = decodedString;
 
         if (taxonString !== '') {
             const abbreviatedMatches = taxonString.match(TaxonSearch.abbreviatedGenusRegex);
@@ -455,6 +459,7 @@ export class TaxonSearch {
                 let canonicalQuery,
                     nearMatchRegex;
                 const escapedTaxonString = TaxonSearch.escapeRegExp(taxonString);
+                const escapedVernacularString = TaxonSearch.escapeRegExp(vernacularString);
 
                 if (taxonString.includes(' ')) {
                     // hybrids of the form Species x nothoname or Species nothoname should be seen as equivalent
@@ -474,6 +479,8 @@ export class TaxonSearch {
                 }
 
                 const strictEscapedTaxonString = `^${escapedTaxonString}.*`;
+                const strictEscapedVernacularString = `^${escapedVernacularString}.*`;
+
                 // var escapedTaxonStringRegExp = new RegExp(strictEscapedTaxonString, 'i');
                 // var canonicalQueryRegExp = new RegExp('^' + canonicalQuery, 'i');
                 // var hybridCanonicalQueryregExp = new RegExp('^X ' + canonicalQuery, 'i');
@@ -504,10 +511,10 @@ export class TaxonSearch {
 
                     results = this.compile_results(matchedIds, preferHybrids, previous);
                 } else {
-                    const caseInsensitiveEscapedTaxonRegex = new RegExp(strictEscapedTaxonString, 'i');
+                    //const caseInsensitiveEscapedTaxonRegex = new RegExp(strictEscapedTaxonString, 'i');
 
                     // strictVernacularRegex allows flexible string and hyphen interchange
-                    const strictVernacularRegex = new RegExp(strictEscapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
+                    const strictVernacularRegex = new RegExp(strictEscapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
 
                     for (let id in Taxon.rawTaxa) {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
@@ -552,9 +559,11 @@ export class TaxonSearch {
                     if (results.length < 5) {
 
                         const spaceTolerantTaxonString = escapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
+                        const spaceTolerantVernacularString = escapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
 
                         //const broadRegExp = new RegExp(`\\b${escapedTaxonString}.*`, 'i'); // match anywhere in string
                         const broadRegExp = new RegExp(`\\b${spaceTolerantTaxonString}.*`, 'i'); // match anywhere in string
+                        const broadVernacularRegExp = new RegExp(`\\b${spaceTolerantVernacularString}.*`, 'i'); // match anywhere in string
 
                         for (let id in Taxon.rawTaxa) {
                             // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
@@ -566,7 +575,7 @@ export class TaxonSearch {
                                         {exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString)};
                                 } else if (
                                     (testTaxon[TaxonSearch.canonicalColumn] !== 0 && broadRegExp.test(testTaxon[TaxonSearch.canonicalColumn])) ||
-                                    (!testTaxon[TaxonSearch.badVernacularColumn] && broadRegExp.test(testTaxon[TaxonSearch.vernacularColumn]))
+                                    (!testTaxon[TaxonSearch.badVernacularColumn] && broadVernacularRegExp.test(testTaxon[TaxonSearch.vernacularColumn]))
                                 ) {
                                     matchedIds[id] = {
                                         exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
