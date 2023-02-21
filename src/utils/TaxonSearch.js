@@ -587,6 +587,17 @@ export class TaxonSearch {
                 const subString = taxonString.substring(0, query.indexOf(' '));
 
                 results = this.lookup(subString, results);
+
+                const entityList = [];
+
+                // de-duplicate results
+                for (let n = 0; n<results.length; n++) {
+                    if (results.hasOwnProperty(n) && entityList.indexOf(results[n].entityId) !== -1) {
+                        delete results[n];
+                    } else {
+                        entityList.push(results[n].entityId);
+                    }
+                }
             }
         } else {
             results = [];
