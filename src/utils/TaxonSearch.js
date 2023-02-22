@@ -590,7 +590,7 @@ export class TaxonSearch {
                 }
             }
 
-            if (results.length === 1 && previous.length === 0 && taxonString.indexOf(' ') > 0) {
+            if (results.length === 1 && previous.length === 0 && taxonString.indexOf(' ') > 0 && !results[0].vernacularMatched) {
                 // try broadening result to genus level
 
                 const subString = taxonString.substring(0, query.indexOf(' '));

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+
+	<link rel="stylesheet" href="picker.css">
+	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round" rel="stylesheet"> -->
+
+	<title>Taxon picker demo</title>
+</head>
+<body>
+	<h1>Taxon picker demo page</h1>
+	<div id="taxonpicker"></div>
+
+	<script type="module">
+		import {TaxonPickerField, Taxon} from "../dist/esm/taxonpicker.min.mjs";
+		import taxa from "https://database.bsbi.org/js/atlasnames.mjs.php";
+
+		Taxon.setTaxa(taxa);
+		const taxonPicker = new TaxonPickerField;
+
+		const taxonPickerContainer = document.getElementById('taxonpicker');
+		taxonPicker.setParams({
+			label: 'taxon name',
+		});
+
+		taxonPicker.addField(taxonPickerContainer);
+
+		taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
+			console.log({'taxon change event': taxonPicker.value});
+		});
+	</script>
+
+</body>
+</html>
