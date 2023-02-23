@@ -6,6 +6,23 @@ import {Taxon} from '../models/Taxon';
 
 const RANK_DISPLAY_NAMES = /\b(subg\.|sect\.|subsect\.|ser\.|group|subsp\.|morph\.|var\.|nothovar\.|f\.|nothosubsp\.|pv\.)/g;
 
+/**
+ * well-formed ranks, used for stripping rank from name for results table sorting
+ *
+ * @type RegExp
+ */
+const CLEAN_RANK_NAMES_REGEX = /\s(subfam\.|subg\.|sect\.|subsect\.|ser\.|subser\.|subsp\.|nothosubsp\.|microsp\.|praesp\.|agsp\.|race|convar\.|nm\.|microgene|f\.|subvar\.|var\.|nothovar\.|cv\.|sublusus|taxon|morph\.|group|sp\.)\s/;
+
+const collator = new Intl.Collator('en', {sensitivity : 'base', ignorePunctuation : true});
+
+/**
+ * from https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
+ *
+ * @param {string} literal
+ * @return string
+ */
+const escapeRegExp = (literal) => literal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 export class TaxonSearch {
 
     /**
@@ -143,13 +160,6 @@ export class TaxonSearch {
         ' f. ',
         ' nothosubsp. ',
     ];
-
-    /**
-     * well-formed ranks, used for stripping rank from name for results table sorting
-     *
-     * @type RegExp
-     */
-    static cleanRankNamesRegex = /\s(subfam\.|subg\.|sect\.|subsect\.|ser\.|subser\.|subsp\.|nothosubsp\.|microsp\.|praesp\.|agsp\.|race|convar\.|nm\.|microgene|f\.|subvar\.|var\.|nothovar\.|cv\.|sublusus|taxon|morph\.|group|sp\.)\s/;
 
     /**
      *
@@ -317,25 +327,13 @@ export class TaxonSearch {
     }
 
     /**
-     * from https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions
-     *
-     * @param {string} literal
-     * @return string
-     */
-    static escapeRegExp(literal) {
-        return literal.replace(TaxonSearch.cleanRegex, '\\$&');
-    };
-
-    static cleanRegex = /[.*+?^${}()|[\]\\]/g;
-
-    /**
      * generate hybrid name permutations
      *
      * @param {string} names unescaped series of species e.g. "glandulifera" or "carex x nigra"
      * @returns {string} name permutations formatted as a regular expression
      */
     static generate_hybrid_combinations_regex(names) {
-        const splitParts = TaxonSearch.escapeRegExp(names).split(/\s+x\s+/i);
+        const splitParts = escapeRegExp(names).split(/\s+x\s+/i);
         if (splitParts.length < 2) {
             return splitParts[0];
         }
@@ -351,7 +349,7 @@ export class TaxonSearch {
          * @param {Array.<string>} items
          * @param {Array.<string>} perms
          */
-        const permutate = function (items, perms) {
+        const permutate = (items, perms) => {
             if (items.length === 0) {
                 hybridPermutations[hybridPermutations.length] = perms.join('[a-zA-Z]* x ');
             } else {
@@ -374,6 +372,7 @@ export class TaxonSearch {
      *
      * @param {string} query
      * @param {array} previous
+     * @param {boolean} allowExact default true, (if false then never mark results as exact match)
      * @returns {Array.<{entityId: string,
                         vernacular: string,
                         qname: string,
@@ -391,7 +390,7 @@ export class TaxonSearch {
                         acceptedAuthority: string
                         }>}
      */
-    lookup(query, previous = []) {
+    lookup(query, previous = [], allowExact = true) {
         let results,
             taxonString,
             canonical,
@@ -401,11 +400,11 @@ export class TaxonSearch {
 
         const decodedString = decodeURIComponent(query).trim();
 
-        // ignore trailing ' x' from string which would just muck up result matching
-        taxonString = TaxonSearch.normaliseTaxonName(decodedString).replace(/\s+x$/i, '');
+        taxonString = TaxonSearch.normaliseTaxonName(decodedString);
         preferHybrids = / x\b/.test(taxonString);
 
-        let vernacularString = decodedString;
+        // ignore trailing ' x' from string which would just muck up result matching
+        taxonString = taxonString.replace(/\s+x$/i, '');
 
         if (taxonString !== '') {
             const abbreviatedMatches = taxonString.match(TaxonSearch.abbreviatedGenusRegex);
@@ -420,13 +419,13 @@ export class TaxonSearch {
                     exp = new RegExp(`^(X\\s|X[a-z]+\\s+)(x )?\\b${TaxonSearch.generate_hybrid_combinations_regex(abbreviatedMatches[3])}.*`, 'i');
                     nearMatchExp = exp;
                 } else {
-                    exp = new RegExp(`^(X )?${TaxonSearch.escapeRegExp(abbreviatedMatches[2])}[a-z]+ (x )?.*\\b${TaxonSearch.generate_hybrid_combinations_regex(abbreviatedMatches[3])}.*`, 'i');
+                    exp = new RegExp(`^(X )?${escapeRegExp(abbreviatedMatches[2])}[a-z]+ (x )?.*\\b${TaxonSearch.generate_hybrid_combinations_regex(abbreviatedMatches[3])}.*`, 'i');
 
                     /**
                      * Similar to exp but without flexibility (.*) after genus part
                      * used only for result ranking (exact>near>vague)
                      */
-                    nearMatchExp = new RegExp(`^(X )?${TaxonSearch.escapeRegExp(abbreviatedMatches[2])}[a-z]+ (x )?\\b${TaxonSearch.generate_hybrid_combinations_regex(abbreviatedMatches[3])}.*`, 'i');
+                    nearMatchExp = new RegExp(`^(X )?${escapeRegExp(abbreviatedMatches[2])}[a-z]+ (x )?\\b${TaxonSearch.generate_hybrid_combinations_regex(abbreviatedMatches[3])}.*`, 'i');
                 }
 
                 for (let id in Taxon.rawTaxa) {
@@ -446,7 +445,7 @@ export class TaxonSearch {
                         ((testTaxon[TaxonSearch.hybridCanonicalColumn] !== '') && exp.test(testTaxon[TaxonSearch.hybridCanonicalColumn]))
                     ) {
                         matchedIds[id] = {
-                            exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
+                            exact: allowExact && (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
                             near: (nearMatchExp.test(testTaxon[TaxonSearch.nameStringColumn])),
                         };
                     }
@@ -458,27 +457,27 @@ export class TaxonSearch {
 
                 let canonicalQuery,
                     nearMatchRegex;
-                const escapedTaxonString = TaxonSearch.escapeRegExp(taxonString);
-                const escapedVernacularString = TaxonSearch.escapeRegExp(vernacularString);
+                const escapedTaxonString = escapeRegExp(taxonString);
+                const escapedVernacularString = escapeRegExp(decodedString);
 
                 if (taxonString.includes(' ')) {
                     // hybrids of the form Species x nothoname or Species nothoname should be seen as equivalent
 
-                    canonicalQuery = `${TaxonSearch.escapeRegExp(taxonString.substring(0, taxonString.indexOf(' ')))
+                    canonicalQuery = `${escapeRegExp(taxonString.substring(0, taxonString.indexOf(' ')))
                         } (x )?.*\\b${TaxonSearch.generate_hybrid_combinations_regex(taxonString.substring(taxonString.indexOf(' ') + 1))}.*`;
 
                     /**
                      * Similar to canonicalQuery/hybridCanonicalQuery but without flexibility (.*) after genus part
                      * used only for result ranking (exact>near>vague)
                      */
-                    nearMatchRegex = new RegExp(`^(?:X\s+)?${TaxonSearch.escapeRegExp(taxonString.substring(0, taxonString.indexOf(' ')))
+                    nearMatchRegex = new RegExp(`^(?:X\s+)?${escapeRegExp(taxonString.substring(0, taxonString.indexOf(' ')))
                         } (x )?\\b${TaxonSearch.generate_hybrid_combinations_regex(taxonString.substring(taxonString.indexOf(' ') + 1))}.*`, 'i');
                 } else {
                     canonicalQuery = `${escapedTaxonString}.*`;
                     nearMatchRegex = new RegExp(`^${escapedTaxonString}.*`);
                 }
 
-                const strictEscapedTaxonString = `^${escapedTaxonString}.*`;
+                //const strictEscapedTaxonString = `^${escapedTaxonString}.*`;
                 const strictEscapedVernacularString = `^${escapedVernacularString}.*`;
 
                 // var escapedTaxonStringRegExp = new RegExp(strictEscapedTaxonString, 'i');
@@ -504,8 +503,9 @@ export class TaxonSearch {
                             ((canonical !== testTaxon[TaxonSearch.nameStringColumn]) && canonicalQueryRegExp.test(canonical))
                         // testTaxon[TaxonSearch.nameStringColumn].search(hybridCanonicalQueryregExp) !== -1
                         ) {
-                            matchedIds[id] =
-                                {exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString)};
+                            matchedIds[id] = {
+                                exact: allowExact && (collator.compare(testTaxon[TaxonSearch.nameStringColumn], taxonString) === 0)
+                            };
                         }
                     }
 
@@ -532,7 +532,7 @@ export class TaxonSearch {
                         // testTaxon[TaxonSearch.nameStringColumn].search(hybridCanonicalQueryregExp) !== -1
                         ) {
                             matchedIds[id] = {
-                                exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
+                                exact: allowExact && (collator.compare(testTaxon[TaxonSearch.nameStringColumn], taxonString) === 0),
                                 near: (nearMatchRegex.test(testTaxon[TaxonSearch.nameStringColumn]) ||
                                     nearMatchRegex.test(canonical)),
                             };
@@ -545,7 +545,7 @@ export class TaxonSearch {
                             // caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
                         ) {
                             matchedIds[id] = {
-                                exact: (testTaxon[TaxonSearch.vernacularColumn] === taxonString),
+                                exact: allowExact && (collator.compare(testTaxon[TaxonSearch.vernacularColumn], taxonString) === 0),
                                 vernacular: true,
                             };
                         }
@@ -571,14 +571,15 @@ export class TaxonSearch {
                                 let testTaxon = Taxon.rawTaxa[id];
 
                                 if (broadRegExp.test(testTaxon[TaxonSearch.nameStringColumn])) {
-                                    matchedIds[id] =
-                                        {exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString)};
+                                    matchedIds[id] = {
+                                        exact: allowExact && (testTaxon[TaxonSearch.nameStringColumn] === taxonString)
+                                    };
                                 } else if (
                                     (testTaxon[TaxonSearch.canonicalColumn] !== 0 && broadRegExp.test(testTaxon[TaxonSearch.canonicalColumn])) ||
                                     (!testTaxon[TaxonSearch.badVernacularColumn] && broadVernacularRegExp.test(testTaxon[TaxonSearch.vernacularColumn]))
                                 ) {
                                     matchedIds[id] = {
-                                        exact: (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
+                                        exact: allowExact && (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
                                         vernacular: true
                                     };
                                 }
@@ -595,7 +596,7 @@ export class TaxonSearch {
 
                 const subString = taxonString.substring(0, query.indexOf(' '));
 
-                results = results.concat(this.lookup(subString, results));
+                results = results.concat(this.lookup(subString, results, false));
 
                 const entityList = [];
 
@@ -748,7 +749,11 @@ export class TaxonSearch {
                     return -1;
                 }
 
-                return a.uname < b.uname ? -1 : 1;
+                const strippedUnameA = a.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /i, '');
+                const strippedUnameB = b.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /i, '');
+
+                return collator.compare(strippedUnameA, strippedUnameB);
+                //return strippedUnameA < strippedUnameB ? -1 : 1;
             });
 
             // truncate results

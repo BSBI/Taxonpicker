@@ -105,7 +105,7 @@ export class TaxonPickerField extends FormField {
 
     /**
      *
-     * @type {{taxonName: string, taxonId: string, vernacularMatch: boolean}}
+     * @type {{taxonName: string, taxonId: string, vernacularMatch: boolean|null}}
      * @private
      */
     _value = {
@@ -133,7 +133,7 @@ export class TaxonPickerField extends FormField {
 
     /**
      *
-     * @param {({taxonName: string, taxonId: string, vernacularMatch: boolean}|null)} taxonSpec
+     * @param {({taxonName: string, taxonId: string, vernacularMatch: boolean|null}|null)} taxonSpec
      */
     set value(taxonSpec) {
         let taxon;
@@ -501,8 +501,6 @@ export class TaxonPickerField extends FormField {
      * @param {Event} event
      */
     focusHandler(event) {
-       //console.log('focused');
-
        const dropDownWrapperEl = document.getElementById(this.#wrapperDivId);
 
        if (!dropDownWrapperEl.classList.contains(CSS_DROPDOWN_FOCUSED)) {
@@ -553,8 +551,6 @@ export class TaxonPickerField extends FormField {
             dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
 
             document.body.classList.remove('hide-controls');
-
-            //console.log('applied blur');
 
         }, 500);
     }
