@@ -11,7 +11,7 @@ const RANK_DISPLAY_NAMES = /\b(subg\.|sect\.|subsect\.|ser\.|group|subsp\.|morph
  *
  * @type RegExp
  */
-const CLEAN_RANK_NAMES_REGEX = /\s(subfam\.|subg\.|sect\.|subsect\.|ser\.|subser\.|subsp\.|nothosubsp\.|microsp\.|praesp\.|agsp\.|race|convar\.|nm\.|microgene|f\.|subvar\.|var\.|nothovar\.|cv\.|sublusus|taxon|morph\.|group|sp\.)\s/;
+const CLEAN_RANK_NAMES_REGEX = /\s(subfam\.|subg\.|sect\.|subsect\.|ser\.|subser\.|subsp\.|nothosubsp\.|microsp\.|praesp\.|agsp\.|race|convar\.|nm\.|microgene|f\.|subvar\.|var\.|nothovar\.|cv\.|sublusus|taxon|morph\.|group|sp\.)\s/g;
 
 const collator = new Intl.Collator('en', {sensitivity : 'base', ignorePunctuation : true});
 
