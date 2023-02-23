@@ -749,8 +749,8 @@ export class TaxonSearch {
                     return -1;
                 }
 
-                const strippedUnameA = a.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /i, '');
-                const strippedUnameB = b.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /i, '');
+                const strippedUnameA = a.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /ig, '');
+                const strippedUnameB = b.uname.replaceAll(CLEAN_RANK_NAMES_REGEX, ' ').replaceAll("'", '').replaceAll(/\bx /ig, '');
 
                 return collator.compare(strippedUnameA, strippedUnameB);
                 //return strippedUnameA < strippedUnameB ? -1 : 1;
