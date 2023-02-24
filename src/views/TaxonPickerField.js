@@ -318,25 +318,15 @@ export class TaxonPickerField extends FormField {
 
                 this.inputChangeHandler(event);
 
-                // @todo this will need to change once highlighted selections are implemented
                 const dropDownEl = document.getElementById(this.#wrapperDivId);
                 dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
 
                 document.body.classList.remove('hide-controls');
                 document.getElementById(this.#inputFieldId).blur();
 
-                // exit if no suggestions
-                // if (this.selectedIndex < 0 || !this.suggestionsCol) {
-                //     return;
-                // }
-
-                // // find which one is currently selected
-                // const selectedModel = this.suggestionsCol.at(this.selectedIndex);
-                //
-                // const species = selectedModel.toJSON();
-                // delete species.selected;
-                // this.trigger('taxon:selected', species, false);
-
+                if (null !== this.#selectedIndex) {
+                    this.#setResult(this.#selectedIndex);
+                }
                 break;
 
             case 'ArrowUp':
@@ -347,7 +337,7 @@ export class TaxonPickerField extends FormField {
                 }
                 break;
 
-            case 'ArrowDown': // Down
+            case 'ArrowDown':
                 event.preventDefault();
 
                 if (this.#searchResults.length) {
@@ -467,6 +457,7 @@ export class TaxonPickerField extends FormField {
     refreshSearchResultsList() {
         const dropdownListEl = document.getElementById(this.#dropDownListDivId);
 
+        this.#selectedIndex = null;
         if (this.#searchResults.length) {
             const htmlResults = [];
 
@@ -478,11 +469,12 @@ export class TaxonPickerField extends FormField {
 
             dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}">${htmlResults.join('')}</div>`;
 
+            if (this.#searchResults[0].exact) {
+                this.setSelectedIndex(0);
+            }
         } else {
             dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p class="taxon-picker-type-prompt">Start typing the name of a taxon.</p></div>`;
         }
-
-        this.#selectedIndex = null;
     }
 
     /**
@@ -533,29 +525,38 @@ export class TaxonPickerField extends FormField {
         if (targetEl && targetEl.dataset.occurrenceid) {
             event.preventDefault();
 
-            const result = this.#searchResults[targetEl.dataset.resultnumber];
-
-            if (result.acceptedEntityId && this.alwaysUseAcceptedName) {
-                // have a non-accepted result
-
-                this.value = {
-                    taxonId: result.acceptedEntityId,
-                    taxonName: result.acceptedQname,
-                    vernacularMatch: false
-                };
-            } else {
-                this.value = {
-                    taxonId: result.entityId,
-                    taxonName: result.vernacularMatched ? result.vernacular : result.qname,
-                    vernacularMatch: result.vernacularMatched
-                };
-            }
+            this.#setResult(parseInt(targetEl.dataset.resultnumber));
+        }
+    }
 
 
-            if (this.#previousId !== this._value.taxonId) {
-                this.#previousId = this._value.taxonId;
-                this.fireEvent(FormField.EVENT_CHANGE);
-            }
+    /**
+     *
+     * @param {number} n
+     */
+    #setResult(n) {
+        const result = this.#searchResults[n];
+
+        if (result.acceptedEntityId && this.alwaysUseAcceptedName) {
+            // have a non-accepted result
+
+            this.value = {
+                taxonId: result.acceptedEntityId,
+                taxonName: result.acceptedQname,
+                vernacularMatch: false
+            };
+        } else {
+            this.value = {
+                taxonId: result.entityId,
+                taxonName: result.vernacularMatched ? result.vernacular : result.qname,
+                vernacularMatch: result.vernacularMatched
+            };
+        }
+
+
+        if (this.#previousId !== this._value.taxonId) {
+            this.#previousId = this._value.taxonId;
+            this.fireEvent(FormField.EVENT_CHANGE);
         }
     }
 
