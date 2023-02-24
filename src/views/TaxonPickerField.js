@@ -6,6 +6,7 @@ import {doubleClickIntercepted} from "../utils/stopDoubleClick";
 const CSS_UNRECOGNIZED_TAXON_CLASS = 'taxon-invalid';
 const CSS_UNRECOGNIZED_TAXON_CONTAINER_CLASS = 'taxon-unrecognized-container';
 const CSS_DROPDOWN_FOCUSED = 'dropdown-focused';
+const CSS_DROPDOWN_SELECTED = 'taxon-selected';
 
 export class TaxonPickerField extends FormField {
     /**
@@ -265,6 +266,7 @@ export class TaxonPickerField extends FormField {
         inputField.spellcheck = false;
         inputField.type = 'search';
         inputField.placeholder = 'Search for a taxon';
+        inputField.setAttribute('aria-autocomplete', 'list');
 
         if (this.validationMessage) {
             // unfortunately the validation message has to be placed immediately after the input field
@@ -340,75 +342,23 @@ export class TaxonPickerField extends FormField {
             case 'ArrowUp':
                 event.preventDefault();
 
-                // if (this.selectedIndex > 0) {
-                //     this.suggestionsCol.at(this.selectedIndex).set('selected', false);
-                //     this.selectedIndex--;
-                //     this.suggestionsCol.at(this.selectedIndex).set('selected', true);
-                // }
+                if (this.#selectedIndex > 0) {
+                    this.setSelectedIndex(this.#selectedIndex - 1);
+                }
                 break;
 
             case 'ArrowDown': // Down
                 event.preventDefault();
 
-                // if ((this.suggestionsCol && this.suggestionsCol.length) && // initialized
-                //     this.selectedIndex < this.suggestionsCol.length - 1) { // not out of boundaries
-                //     this.suggestionsCol.at(this.selectedIndex).set('selected', false);
-                //     this.selectedIndex++;
-                //     this.suggestionsCol.at(this.selectedIndex).set('selected', true);
-                // }
+                if (this.#searchResults.length) {
+                    if (this.#selectedIndex === null) {
+                        this.setSelectedIndex(0);
+                    } else if (this.#selectedIndex < this.#searchResults.length - 1) {
+                        this.setSelectedIndex(this.#selectedIndex + 1);
+                    }
+                }
                 break;
-
-            // default:
-            //     // Other
-            //     let text = input;
-            //
-            //     // on keyDOWN need to add the pressed char
-            //     let pressedChar = String.fromCharCode(event.key);
-            //     if (event.keyCode != 8) {
-            //         // http://stackoverflow.com/questions/19278037/javascript-non-unicode-char-code-to-unicode-character
-            //         if (e.keyCode === 189 || e.keyCode === 109) {
-            //             pressedChar = '-';
-            //         }
-            //         if (e.keyCode === 190) {
-            //             pressedChar = '.';
-            //         }
-            //
-            //         text += pressedChar;
-            //     } else {
-            //         // Backspace - remove a char
-            //         text = text.slice(0, text.length - 1);
-            //     }
-            //
-            //     // proceed if minimum length phrase was provided
-            //     if ((text.replace(/\.|\s/g, '').length) >= TaxonSearch.MIN_SEARCH_LENGTH) {
-            //         text = text.trim();
-            //
-            //         // Clear previous timeout
-            //         if (this.#taxonLookupTimeoutHandle !== -1) {
-            //             clearTimeout(this.#taxonLookupTimeoutHandle);
-            //         }
-            //
-            //         // Set new timeout - don't run if user is typing
-            //         this.#taxonLookupTimeoutHandle = setTimeout(function () {
-            //             // let controller know
-            //             that.trigger('taxon:searched', text.toLowerCase());
-            //         }, 100);
-            //     } else if (text.replace(/\.|\s/g, '').length === 0) {
-            //         // no search text, but pass through search, so that 'Unknown sp' can be shown
-            //
-            //         // Clear previous timeout
-            //         if (this.#taxonLookupTimeoutHandle !== -1) {
-            //             clearTimeout(this.#taxonLookupTimeoutHandle);
-            //         }
-            //
-            //         // Set new timeout - don't run if user is typing
-            //         this.#taxonLookupTimeoutHandle = setTimeout(function () {
-            //             // let controller know
-            //             that.trigger('taxon:searched', '');
-            //         }, 100);
-            //     }
         }
-
     }
 
     /**
@@ -422,45 +372,6 @@ export class TaxonPickerField extends FormField {
             this.#triggerQuery(event.target);
         }
     }
-
-    // /**
-    //  *
-    //  * @param {KeyboardEvent} event
-    //  * @return {boolean}
-    //  */
-    // keyupHandler(event) {
-    //     //console.log({'key' : event.key});
-    //
-    //     if (event.key && (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete')) {
-    //         //keypress was a printable character
-    //
-    //         this.#triggerQuery(event.target);
-    //
-    //         // let text = TaxonPickerField.cleanRawInput(event.target);
-    //         //
-    //         // // proceed if minimum length phrase was provided
-    //         // if ((text.length) >= TaxonSearch.MIN_SEARCH_LENGTH) {
-    //         //
-    //         //     // Clear previous timeout
-    //         //     if (this.#taxonLookupTimeoutHandle) {
-    //         //         clearTimeout(this.#taxonLookupTimeoutHandle);
-    //         //     }
-    //         //
-    //         //     // Set new timeout - don't run if user is typing
-    //         //     this.#taxonLookupTimeoutHandle = setTimeout(() => {
-    //         //         this.#searchResults = this.taxonSearch.lookup(
-    //         //             TaxonPickerField.cleanRawInput(document.getElementById(this.#inputFieldId))
-    //         //         );
-    //         //
-    //         //         console.log(this.#searchResults);
-    //         //
-    //         //         this.refreshSearchResultsList();
-    //         //
-    //         //         this.#taxonLookupTimeoutHandle = null;
-    //         //     }, TaxonPickerField.timeoutDelay);
-    //         // }
-    //     }
-    // }
 
     /**
      *
@@ -482,8 +393,6 @@ export class TaxonPickerField extends FormField {
                 this.#searchResults = this.taxonSearch.lookup(
                     FormField.cleanRawInput(document.getElementById(this.#inputFieldId))
                 );
-
-                //console.log(this.#searchResults);
 
                 this.refreshSearchResultsList();
 
@@ -569,23 +478,36 @@ export class TaxonPickerField extends FormField {
 
             dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}">${htmlResults.join('')}</div>`;
 
-
-
-            // const htmlResults = [];
-            //
-            // let n = 0;
-            // for (let result of this.#searchResults) {
-            //     htmlResults[htmlResults.length] = `<li><a href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}">${TaxonSearch.formatter(result)}</a></li>`;
-            //     ++n;
-            // }
-            //
-            // dropdownListEl.innerHTML = `<ul id="${this.#dropDownListUlId}">${htmlResults.join('')}</ul>`;
         } else {
             dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p class="taxon-picker-type-prompt">Start typing the name of a taxon.</p></div>`;
-            //dropdownListEl.innerHTML = '';
         }
 
         this.#selectedIndex = null;
+    }
+
+    /**
+     *
+     * @param {number|null} n
+     */
+    setSelectedIndex(n) {
+        if (n !== this.#selectedIndex) {
+            if (null !== this.#selectedIndex) {
+                // clear existing selection
+
+                const selectedEl = document.querySelector(`div#${this.#dropDownListDivId} a[data-resultnumber="${this.#selectedIndex}"]`);
+                if (selectedEl) {
+                    selectedEl.classList.remove(CSS_DROPDOWN_SELECTED);
+                }
+            }
+
+            const selectedEl = document.querySelector(`div#${this.#dropDownListDivId} a[data-resultnumber="${n}"]`);
+            if (selectedEl) {
+                selectedEl.classList.add(CSS_DROPDOWN_SELECTED);
+                this.#selectedIndex = n;
+            } else {
+                this.#selectedIndex = null; // something's gone wrong
+            }
+        }
     }
 
     static cleanRawInput(inputElement) {
@@ -606,13 +528,10 @@ export class TaxonPickerField extends FormField {
         if (this.#changeEventTimeout) {
             clearTimeout(this.#changeEventTimeout);
             this.#changeEventTimeout = null;
-            //console.log('cleared a pending change event');
         }
 
         if (targetEl && targetEl.dataset.occurrenceid) {
             event.preventDefault();
-
-            //console.log(`got target ${targetEl.dataset.occurrenceid}`);
 
             const result = this.#searchResults[targetEl.dataset.resultnumber];
 
@@ -629,7 +548,7 @@ export class TaxonPickerField extends FormField {
                     taxonId: result.entityId,
                     taxonName: result.vernacularMatched ? result.vernacular : result.qname,
                     vernacularMatch: result.vernacularMatched
-                }; // setter will refresh the field but not fire a change event
+                };
             }
 
 

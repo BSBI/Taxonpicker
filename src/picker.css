@@ -92,6 +92,11 @@ q.taxon-vernacular {
     display: inline-block;
 }
 
+a.list-group-item taxon-selected {
+    background-color: Highlight;
+    color: HighlightText;
+}
+
 @media (min-width: 481px) {
     div.dropdown-wrapper.dropdown-focused div.dropdown-list {
         display: block;
