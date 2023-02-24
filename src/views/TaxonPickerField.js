@@ -324,9 +324,11 @@ export class TaxonPickerField extends FormField {
                 document.body.classList.remove('hide-controls');
                 document.getElementById(this.#inputFieldId).blur();
 
-                if (null !== this.#selectedIndex) {
-                    this.#setResult(this.#selectedIndex);
-                }
+                // setting of result will be handled during blur instead
+                
+                // if (null !== this.#selectedIndex) {
+                //     this.#setResult(this.#selectedIndex);
+                // }
                 break;
 
             case 'ArrowUp':
@@ -622,11 +624,15 @@ export class TaxonPickerField extends FormField {
                 const dropDownEl = document.getElementById(this.#wrapperDivId);
                 dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
             } else {
-
-                // check if the dropdown list has an exact match, if so then use it
-                const exactMatch = this.#searchResults.find((result) => {
-                    return result.exact;
-                });
+                let exactMatch;
+                if (this.#selectedIndex !== null) {
+                    exactMatch = this.#searchResults[this.#selectedIndex];
+                } else {
+                    // check if the dropdown list has an exact match, if so then use it
+                    exactMatch = this.#searchResults.find((result) => {
+                        return result.exact;
+                    });
+                }
 
                 if (exactMatch) {
                     //console.log('exact match');
