@@ -92,7 +92,7 @@ q.taxon-vernacular {
     display: inline-block;
 }
 
-a.list-group-item .taxon-selected {
+a.list-group-item.taxon-selected {
     background-color: Highlight;
     color: HighlightText;
 }
