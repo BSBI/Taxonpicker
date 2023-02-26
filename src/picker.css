@@ -97,6 +97,12 @@ a.list-group-item.taxon-selected {
     color: HighlightText;
 }
 
+div.list-group p.taxon-picker-type-prompt {
+    color: darkgreen;
+    padding: 3px;
+    font-weight: bolder;
+}
+
 @media (min-width: 481px) {
     div.dropdown-wrapper.dropdown-focused div.dropdown-list {
         display: block;
@@ -130,11 +136,5 @@ a.list-group-item.taxon-selected {
 
     body.hide-controls div.bsbi-atlas-map-controls {
         display: none;
-    }
-
-    div.list-group p.taxon-picker-type-prompt {
-        color: darkgreen;
-        padding: 3px;
-        font-weight: bolder;
     }
 }

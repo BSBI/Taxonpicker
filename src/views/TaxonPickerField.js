@@ -267,6 +267,9 @@ export class TaxonPickerField extends FormField {
         inputField.type = 'search';
         inputField.placeholder = 'Search for a taxon';
         inputField.setAttribute('aria-autocomplete', 'list');
+        inputField.setAttribute('role', 'combobox');
+        inputField.setAttribute('aria-expanded', 'false');
+        inputField.setAttribute('aria-activedescendant', '');
 
         if (this.validationMessage) {
             // unfortunately the validation message has to be placed immediately after the input field
@@ -278,6 +281,9 @@ export class TaxonPickerField extends FormField {
         const dropDownList = wrapperEl.appendChild(document.createElement('div'));
         dropDownList.className = 'dropdown-list';
         this.#dropDownListDivId = dropDownList.id = FormField.nextId;
+        dropDownList.setAttribute('role', 'listbox');
+
+        inputField.setAttribute('aria-controls', this.#dropDownListDivId);
 
         this.#dropDownListUlId = FormField.nextId;
 
@@ -311,24 +317,7 @@ export class TaxonPickerField extends FormField {
             case 'Enter':
                 event.preventDefault();
 
-                if (this.#taxonLookupTimeoutHandle) {
-                    clearTimeout(this.#taxonLookupTimeoutHandle);
-                    this.#taxonLookupTimeoutHandle = null;
-                }
-
-                this.inputChangeHandler(event);
-
-                const dropDownEl = document.getElementById(this.#wrapperDivId);
-                dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
-
-                document.body.classList.remove('hide-controls');
-                document.getElementById(this.#inputFieldId).blur();
-
-                // setting of result will be handled during blur instead
-                
-                // if (null !== this.#selectedIndex) {
-                //     this.#setResult(this.#selectedIndex);
-                // }
+                this.#applyResult(event);
                 break;
 
             case 'ArrowUp':
@@ -350,7 +339,47 @@ export class TaxonPickerField extends FormField {
                     }
                 }
                 break;
+
+            case 'Escape':
+                // see https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/#kbd_label_textbox
+
+                // expected aria behaviour for combo box
+                // If the listbox is displayed, closes it.
+                // If the listbox is not displayed, clears the textbox.
+
+                event.preventDefault();
+                if (this.#searchResults.length && this.#selectedIndex !== null) {
+                    this.#applyResult(event);
+                } else {
+                    const inputEl = document.getElementById(this.#inputFieldId);
+                    inputEl.value = '';
+                    this.#searchResults.length = 0;
+                    inputEl.blur();
+                }
+                break;
         }
+    }
+
+    /**
+     * called after enter pressed or escape pressed with a selected match
+     *
+     * @param {KeyboardEvent} event
+     */
+    #applyResult(event) {
+        if (this.#taxonLookupTimeoutHandle) {
+            clearTimeout(this.#taxonLookupTimeoutHandle);
+            this.#taxonLookupTimeoutHandle = null;
+        }
+
+        this.inputChangeHandler(event);
+
+        const dropDownEl = document.getElementById(this.#wrapperDivId);
+        dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
+
+        document.body.classList.remove('hide-controls');
+        document.getElementById(this.#inputFieldId).blur();
+
+        // setting of result will be handled during blur instead
     }
 
     /**
@@ -451,6 +480,10 @@ export class TaxonPickerField extends FormField {
             const dropDownEl = document.getElementById(this.#wrapperDivId);
             dropDownEl.classList.remove(CSS_DROPDOWN_FOCUSED);
 
+            const inputEl = document.getElementById(this.#inputFieldId);
+            inputEl.setAttribute('aria-expanded', 'false');
+            inputEl.setAttribute('aria-activedescendant', '');
+
             document.body.classList.remove('hide-controls');
 
         }, 500);
@@ -458,6 +491,7 @@ export class TaxonPickerField extends FormField {
 
     refreshSearchResultsList() {
         const dropdownListEl = document.getElementById(this.#dropDownListDivId);
+        const inputEl = document.getElementById(this.#inputFieldId);
 
         this.#selectedIndex = null;
         if (this.#searchResults.length) {
@@ -465,7 +499,8 @@ export class TaxonPickerField extends FormField {
 
             let n = 0;
             for (let result of this.#searchResults) {
-                htmlResults[htmlResults.length] = `<a class="list-group-item list-group-item-action" href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}">${TaxonSearch.formatter(result)}</a>`;
+                let itemId = `taxonitem${this.#dropDownListDivId}_${result.entityId}`;
+                htmlResults[htmlResults.length] = `<a class="list-group-item list-group-item-action" href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}" id="${itemId}">${TaxonSearch.formatter(result)}</a>`;
                 ++n;
             }
 
@@ -474,8 +509,12 @@ export class TaxonPickerField extends FormField {
             if (this.#searchResults[0].exact) {
                 this.setSelectedIndex(0);
             }
+
+            inputEl.setAttribute('aria-expanded', 'true');
         } else {
             dropdownListEl.innerHTML = `<div class="list-group" id="${this.#dropDownListUlId}"><p class="taxon-picker-type-prompt">Start typing the name of a taxon.</p></div>`;
+            inputEl.setAttribute('aria-expanded', 'false');
+            inputEl.setAttribute('aria-activedescendant', '');
         }
     }
 
@@ -491,6 +530,7 @@ export class TaxonPickerField extends FormField {
                 const selectedEl = document.querySelector(`div#${this.#dropDownListDivId} a[data-resultnumber="${this.#selectedIndex}"]`);
                 if (selectedEl) {
                     selectedEl.classList.remove(CSS_DROPDOWN_SELECTED);
+                    selectedEl.setAttribute('aria-selected', 'false');
                 }
             }
 
@@ -498,6 +538,10 @@ export class TaxonPickerField extends FormField {
             if (selectedEl) {
                 selectedEl.classList.add(CSS_DROPDOWN_SELECTED);
                 this.#selectedIndex = n;
+                selectedEl.setAttribute('aria-selected', 'true');
+
+                const inputEl = document.getElementById(this.#inputFieldId);
+                inputEl.setAttribute('aria-activedescendant', selectedEl.id);
             } else {
                 this.#selectedIndex = null; // something's gone wrong
             }
