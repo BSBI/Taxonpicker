@@ -658,14 +658,18 @@ export class TaxonSearch {
                 let doUpdate = false;
 
                 if (taxonString.indexOf(' ') > 0 && !results[0].vernacularMatched) {
-                    // try broadening result of match on latin name to genus level
+                    if (results[0].exact) {
+                        // exact scientific match, try broadening to parent level
+                        results = results.concat(this.lookup_parent_results(results[0].entityId, false));
+                    }
 
+                    // try broadening result of match on latin name to genus level
                     const subString = taxonString.substring(0, query.indexOf(' '));
 
                     results = results.concat(this.lookup(subString, results, false));
                     doUpdate = true;
                 } else if (results[0].vernacularMatched && results[0].exact) {
-                    // exact vernacular match, try broadening to genus level
+                    // exact vernacular match, try broadening to parent level
 
                     results = results.concat(this.lookup_parent_results(results[0].entityId, true));
                     doUpdate = true;
@@ -811,9 +815,11 @@ export class TaxonSearch {
                     // so sort by this
 
                     if (a.vernacular !== b.vernacular) {
+                        if (a.vernacular.length === b.vernacular.length) {
+                            return collator.compare(a.vernacular, b.vernacular);
+                        }
+
                         return a.vernacular.length < b.vernacular.length ? -1 : 1;
-                    } else {
-                        return collator.compare(a.vernacular, b.vernacular);
                     }
                 }
 
