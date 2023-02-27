@@ -380,6 +380,8 @@ export class TaxonPickerField extends FormField {
                         // indicating a desire for auto-completion wih the best suggestion
 
                         this.#setResult(0);
+                        //this.setSelectedIndex(0);
+                        this.#triggerQuery(event.target);
                         event.preventDefault();
                     }
 
