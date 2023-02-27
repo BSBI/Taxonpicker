@@ -715,7 +715,7 @@ export class TaxonSearch {
                         qualifier: taxon[TaxonSearch.qualifierColumn],
                         authority: taxon[TaxonSearch.authorityColumn],
                         uname: taxon[TaxonSearch.nameStringColumn],
-                        vernacularMatched: matchedIds[id].hasOwnProperty('vernacular'),
+                        vernacularMatched: matchedIds[id].hasOwnProperty('vernacular') && matchedIds[id].vernacular,
                         exact: matchedIds[id].hasOwnProperty('exact') && matchedIds[id].exact,
                         near: matchedIds[id].hasOwnProperty('near') && matchedIds[id].near,
                     };
