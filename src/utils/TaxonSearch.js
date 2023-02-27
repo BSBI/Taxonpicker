@@ -539,12 +539,7 @@ export class TaxonSearch {
                     nearMatchRegex = new RegExp(`^${escapedTaxonString}.*`);
                 }
 
-                //const strictEscapedTaxonString = `^${escapedTaxonString}.*`;
                 const strictEscapedVernacularString = `^${escapedVernacularString}.*`;
-
-                // var escapedTaxonStringRegExp = new RegExp(strictEscapedTaxonString, 'i');
-                // var canonicalQueryRegExp = new RegExp('^' + canonicalQuery, 'i');
-                // var hybridCanonicalQueryregExp = new RegExp('^X ' + canonicalQuery, 'i');
                 const canonicalQueryRegExp = new RegExp(`^(?:X\s+)?${canonicalQuery}`, 'i');
 
                 if (!TaxonSearch.showVernacular) {
@@ -560,10 +555,8 @@ export class TaxonSearch {
                             testTaxon[TaxonSearch.canonicalColumn];
 
                         if (
-                            // testTaxon[TaxonSearch.nameStringColumn].search(escapedTaxonStringRegExp) !== -1 ||
                             canonicalQueryRegExp.test(testTaxon[TaxonSearch.nameStringColumn]) ||
                             ((canonical !== testTaxon[TaxonSearch.nameStringColumn]) && canonicalQueryRegExp.test(canonical))
-                        // testTaxon[TaxonSearch.nameStringColumn].search(hybridCanonicalQueryregExp) !== -1
                         ) {
                             matchedIds[id] = {
                                 exact: allowExact && (collator.compare(testTaxon[TaxonSearch.nameStringColumn], taxonString) === 0)
@@ -573,8 +566,6 @@ export class TaxonSearch {
 
                     results = this.compile_results(matchedIds, preferHybrids, previous);
                 } else {
-                    //const caseInsensitiveEscapedTaxonRegex = new RegExp(strictEscapedTaxonString, 'i');
-
                     // strictVernacularRegex allows flexible string and hyphen interchange
                     const strictVernacularRegex = new RegExp(strictEscapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
 
@@ -588,10 +579,8 @@ export class TaxonSearch {
                             testTaxon[TaxonSearch.canonicalColumn];
 
                         if (
-                            // testTaxon[TaxonSearch.nameStringColumn].search(escapedTaxonStringRegExp) !== -1 ||
                             canonicalQueryRegExp.test(testTaxon[TaxonSearch.nameStringColumn]) ||
                             ((canonical !== testTaxon[TaxonSearch.nameStringColumn]) && canonicalQueryRegExp.test(canonical))
-                        // testTaxon[TaxonSearch.nameStringColumn].search(hybridCanonicalQueryregExp) !== -1
                         ) {
                             matchedIds[id] = {
                                 exact: allowExact && (collator.compare(testTaxon[TaxonSearch.nameStringColumn], taxonString) === 0),
@@ -602,9 +591,6 @@ export class TaxonSearch {
                             !testTaxon[TaxonSearch.badVernacularColumn] &&
                             (strictVernacularRegex.test(testTaxon[TaxonSearch.vernacularColumn]) ||
                                 strictVernacularRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
-                            // !testTaxon[TaxonSearch.badVernacularColumn] &&
-                            // (caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularColumn]) ||
-                            // caseInsensitiveEscapedTaxonRegex.test(testTaxon[TaxonSearch.vernacularRootColumn]))
                         ) {
                             matchedIds[id] = {
                                 exact: allowExact && (collator.compare(testTaxon[TaxonSearch.vernacularColumn], taxonString) === 0),
@@ -623,7 +609,6 @@ export class TaxonSearch {
                         const spaceTolerantTaxonString = escapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
                         const spaceTolerantVernacularString = escapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
 
-                        //const broadRegExp = new RegExp(`\\b${escapedTaxonString}.*`, 'i'); // match anywhere in string
                         const broadRegExp = new RegExp(`\\b${spaceTolerantTaxonString}.*`, 'i'); // match anywhere in string
                         const broadVernacularRegExp = new RegExp(`\\b${spaceTolerantVernacularString}.*`, 'i'); // match anywhere in string
 

@@ -293,7 +293,7 @@ export class TaxonPickerField extends FormField {
         }
 
         inputField.addEventListener('keydown', this.keydownHandler.bind(this));
-        inputField.addEventListener('keyup', this.keyupHandler.bind(this));
+        //inputField.addEventListener('keyup', this.keyupHandler.bind(this));
         inputField.addEventListener('input', this.inputHandler.bind(this));
         inputField.addEventListener('change', this.inputChangeHandler.bind(this));
 
@@ -317,18 +317,18 @@ export class TaxonPickerField extends FormField {
         }
     }
 
-    /**
-     *
-     * @param {KeyboardEvent} event
-     * @param {HTMLInputElement} event.target
-     * @return {boolean}
-     */
-    keyupHandler(event) {
-        switch (event.key) {
-            case 'Escape':
-                console.log('Escape caught in key-up handler');
-        }
-    }
+    // /**
+    //  *
+    //  * @param {KeyboardEvent} event
+    //  * @param {HTMLInputElement} event.target
+    //  * @return {boolean}
+    //  */
+    // keyupHandler(event) {
+    //     switch (event.key) {
+    //         case 'Escape':
+    //             console.log('Escape caught in key-up handler');
+    //     }
+    // }
 
     /**
      *
@@ -363,6 +363,21 @@ export class TaxonPickerField extends FormField {
                     } else if (this.#selectedIndex < this.#searchResults.length - 1) {
                         this.setSelectedIndex(this.#selectedIndex + 1);
                     }
+                }
+                break;
+
+            case 'ArrowRight':
+                if (this.#searchResults.length && this.#selectedIndex === null) {
+                    let caretPosition
+                    if (event.target.selectionDirection === 'backward') {
+                        caretPosition = event.target.selectionStart;
+                    } else {
+                        caretPosition = event.target.selectionEnd;
+                    }
+
+                    console.log({
+                        caret : `${caretPosition} of ${event.target.value.length}`
+                    });
                 }
                 break;
 
