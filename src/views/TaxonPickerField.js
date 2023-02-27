@@ -375,9 +375,17 @@ export class TaxonPickerField extends FormField {
                         caretPosition = event.target.selectionEnd;
                     }
 
-                    console.log({
-                        caret : `${caretPosition} of ${event.target.value.length}`
-                    });
+                    if (caretPosition === event.target.length) {
+                        // keypress right while at end of input
+                        // indicating a desire for auto-completion wih the best suggestion
+
+                        this.#setResult(0);
+                        event.preventDefault();
+                    }
+
+                    // console.log({
+                    //     caret : `${caretPosition} of ${event.target.value.length}`
+                    // });
                 }
                 break;
 
