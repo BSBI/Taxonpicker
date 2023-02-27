@@ -375,7 +375,7 @@ export class TaxonPickerField extends FormField {
                         caretPosition = event.target.selectionEnd;
                     }
 
-                    if (caretPosition === event.target.length) {
+                    if (caretPosition === event.target.value.length) {
                         // keypress right while at end of input
                         // indicating a desire for auto-completion wih the best suggestion
 
