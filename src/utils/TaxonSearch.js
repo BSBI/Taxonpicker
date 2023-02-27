@@ -370,6 +370,68 @@ export class TaxonSearch {
 
     /**
      *
+     * @param {string} taxonId
+     * @param {boolean} useVernacular
+     * @returns {Array.<{entityId: string,
+     *                         vernacular: string,
+     *                         qname: string,
+     *                         name: string,
+     *                         qualifier: string,
+     *                         authority: string,
+     *                         uname: string,
+     *                         vernacularMatched: boolean,
+     *                         exact: boolean,
+     *                         near: boolean,
+     *                         formatted: string,
+     *                         acceptedEntityId: string,
+     *                         acceptedNameString: string,
+     *                         acceptedQualifier: string,
+     *                         acceptedAuthority: string
+     *                         }>}
+     */
+    lookup_parent_results(taxonId, useVernacular) {
+        const referenceTaxon = Taxon.fromId(taxonId);
+
+        if (referenceTaxon.parentIds.length) {
+            const parentIdsSet = new Set(referenceTaxon.parentIds);
+            const matchedIds = {};
+
+            if (useVernacular) {
+                for (let id in Taxon.rawTaxa) {
+                    // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
+                    let testTaxon = Taxon.rawTaxa[id];
+
+                    // test that has vernacular name and that parent ids intersect
+                    if (testTaxon[6] && testTaxon[10].filter(Set.prototype.has, parentIdsSet).length) {
+                        matchedIds[id] = {
+                            exact : false,
+                            near : false,
+                            vernacular : true
+                        };
+                    }
+                }
+            } else {
+                for (let id in Taxon.rawTaxa) {
+                    // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
+                    let testTaxon = Taxon.rawTaxa[id];
+
+                    // test that name is accepted and that parent ids intersect
+                    if (!testTaxon[3] && testTaxon[10].filter(Set.prototype.has, parentIdsSet).length) {
+                        matchedIds[id] = {
+                            exact : false,
+                            near : false
+                        };
+                    }
+                }
+            }
+            return this.compile_results(matchedIds, false, []);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     *
      * @param {string} query
      * @param {array} previous
      * @param {boolean} allowExact default true, (if false then never mark results as exact match)
@@ -591,26 +653,39 @@ export class TaxonSearch {
                 }
             }
 
-            if (results.length === 1 && previous.length === 0 && taxonString.indexOf(' ') > 0 && !results[0].vernacularMatched) {
-                // try broadening result to genus level
+            // if only single result and first-pass then try to expand list of matches
+            if (results.length === 1 && previous.length === 0) {
+                let doUpdate = false;
 
-                const subString = taxonString.substring(0, query.indexOf(' '));
+                if (taxonString.indexOf(' ') > 0 && !results[0].vernacularMatched) {
+                    // try broadening result of match on latin name to genus level
 
-                results = results.concat(this.lookup(subString, results, false));
+                    const subString = taxonString.substring(0, query.indexOf(' '));
 
-                const entityList = [];
+                    results = results.concat(this.lookup(subString, results, false));
+                    doUpdate = true;
+                } else if (results[0].vernacularMatched && results[0].exact) {
+                    // exact vernacular match, try broadening to genus level
 
-                // de-duplicate results
-                for (let n = 0; n<results.length; n++) {
-                    if (results.hasOwnProperty(n) && entityList.indexOf(results[n].entityId) !== -1) {
-                        delete results[n];
-                    } else {
-                        entityList.push(results[n].entityId);
-                    }
+                    results = results.concat(this.lookup_parent_results(results[0].entityId, true));
+                    doUpdate = true;
                 }
 
-                // reindex results;
-                results = results.filter(_ => true);
+                if (doUpdate) {
+                    const entityList = [];
+
+                    // de-duplicate results
+                    for (let n = 0; n < results.length; n++) {
+                        if (results.hasOwnProperty(n) && entityList.indexOf(results[n].entityId) !== -1) {
+                            delete results[n];
+                        } else {
+                            entityList.push(results[n].entityId);
+                        }
+                    }
+
+                    // reindex results;
+                    results = results.filter(_ => true);
+                }
             }
         } else {
             results = [];

@@ -306,6 +306,18 @@ export class TaxonPickerField extends FormField {
 
     /**
      *
+     * @param {number} tabIndex
+     */
+    setTabIndex(tabIndex) {
+        const inputEl = document.getElementById(this.#inputFieldId);
+
+        if (inputEl) {
+            inputEl.tabIndex = tabIndex;
+        }
+    }
+
+    /**
+     *
      * @param {KeyboardEvent} event
      * @param {HTMLInputElement} event.target
      * @return {boolean}
