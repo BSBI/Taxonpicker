@@ -812,6 +812,8 @@ export class TaxonSearch {
 
                     if (a.vernacular !== b.vernacular) {
                         return a.vernacular.length < b.vernacular.length ? -1 : 1;
+                    } else {
+                        return collator.compare(a.vernacular, b.vernacular);
                     }
                 }
 

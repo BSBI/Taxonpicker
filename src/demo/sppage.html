@@ -138,6 +138,7 @@
                                 const taxonPickerContainer = document.getElementById('bsbi-atlas-taxon-selector-container');
                                 taxonPicker.addField(taxonPickerContainer);
                                 taxonPicker.setTaxonFromId('2cd4p9h.xt1'); // Poa annua
+                                taxonPicker.setTabIndex(0);
 
                                 taxonPicker.addListener(TaxonPickerField.EVENT_CHANGE, () => {
                                     console.log({'taxon change event': taxonPicker.value});

@@ -293,6 +293,7 @@ export class TaxonPickerField extends FormField {
         }
 
         inputField.addEventListener('keydown', this.keydownHandler.bind(this));
+        inputField.addEventListener('keyup', this.keyupHandler.bind(this));
         inputField.addEventListener('input', this.inputHandler.bind(this));
         inputField.addEventListener('change', this.inputChangeHandler.bind(this));
 
@@ -313,6 +314,19 @@ export class TaxonPickerField extends FormField {
 
         if (inputEl) {
             inputEl.tabIndex = tabIndex;
+        }
+    }
+
+    /**
+     *
+     * @param {KeyboardEvent} event
+     * @param {HTMLInputElement} event.target
+     * @return {boolean}
+     */
+    keyupHandler(event) {
+        switch (event.key) {
+            case 'Escape':
+                console.log('Escape caught in key-up handler');
         }
     }
 
