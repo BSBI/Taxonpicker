@@ -317,19 +317,6 @@ export class TaxonPickerField extends FormField {
         }
     }
 
-    // /**
-    //  *
-    //  * @param {KeyboardEvent} event
-    //  * @param {HTMLInputElement} event.target
-    //  * @return {boolean}
-    //  */
-    // keyupHandler(event) {
-    //     switch (event.key) {
-    //         case 'Escape':
-    //             console.log('Escape caught in key-up handler');
-    //     }
-    // }
-
     /**
      *
      * @param {KeyboardEvent} event
@@ -380,14 +367,9 @@ export class TaxonPickerField extends FormField {
                         // indicating a desire for auto-completion wih the best suggestion
 
                         this.#setResult(0);
-                        //this.setSelectedIndex(0);
                         this.#triggerQuery(event.target);
                         event.preventDefault();
                     }
-
-                    // console.log({
-                    //     caret : `${caretPosition} of ${event.target.value.length}`
-                    // });
                 }
                 break;
 
@@ -395,8 +377,8 @@ export class TaxonPickerField extends FormField {
                 // see https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-autocomplete-list/#kbd_label_textbox
 
                 // expected aria behaviour for combo box
-                // If the listbox is displayed, closes it.
-                // If the listbox is not displayed, clears the textbox.
+                // If the list-box is displayed, closes it.
+                // If the list-box is not displayed, clears the text-box.
 
                 event.preventDefault();
                 if (this.#searchResults.length && this.#selectedIndex !== null) {

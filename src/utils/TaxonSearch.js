@@ -567,7 +567,10 @@ export class TaxonSearch {
                     results = this.compile_results(matchedIds, preferHybrids, previous);
                 } else {
                     // strictVernacularRegex allows flexible string and hyphen interchange
-                    const strictVernacularRegex = new RegExp(strictEscapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
+
+                    // Safari doesn't support look-behind so need substitute
+                    //const strictVernacularRegex = new RegExp(strictEscapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*'), 'i');
+                    const strictVernacularRegex = new RegExp(strictEscapedVernacularString.replace(/(\p{L})[\s-]+(?=\p{L})/gu, '$1[\\s-]*'), 'i');
 
                     for (let id in Taxon.rawTaxa) {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
@@ -605,9 +608,13 @@ export class TaxonSearch {
                      * if very few matches then retry searching using much fuzzier matching
                      */
                     if (results.length < 5) {
+                        // Safari doesn't support look-behind so need substitute
+                        //const spaceTolerantTaxonString = escapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*');
+                        const spaceTolerantTaxonString = escapedTaxonString.replace(/(\p{L})[\s-]+(?=\p{L})/gu, '$1[\\s-]*');
 
-                        const spaceTolerantTaxonString = escapedTaxonString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
-                        const spaceTolerantVernacularString = escapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*')
+                        // Safari doesn't support look-behind so need substitute
+                        //const spaceTolerantVernacularString = escapedVernacularString.replace(/(?<=\p{L})[\s-]+(?=\p{L})/gu, '[\\s-]*');
+                        const spaceTolerantVernacularString = escapedVernacularString.replace(/(\p{L})[\s-]+(?=\p{L})/gu, '$1[\\s-]*');
 
                         const broadRegExp = new RegExp(`\\b${spaceTolerantTaxonString}.*`, 'i'); // match anywhere in string
                         const broadVernacularRegExp = new RegExp(`\\b${spaceTolerantVernacularString}.*`, 'i'); // match anywhere in string

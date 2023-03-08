@@ -118,7 +118,7 @@ export class Taxon {
      */
     static fromId (id) {
         if (!Taxon.rawTaxa) {
-            throw new TaxonError(`Taxon.fromId() called before taxon list has been initialise.`);
+            throw new TaxonError(`Taxon.fromId() called before taxon list has been initialized.`);
         }
 
         if (!Taxon.rawTaxa.hasOwnProperty(id)) {
