@@ -330,7 +330,7 @@ export class TaxonPickerField extends FormField {
             case 'Enter':
                 event.preventDefault();
 
-                this.#applyResult(event);
+                this._applyResult(event);
                 break;
 
             case 'ArrowUp':
@@ -366,8 +366,8 @@ export class TaxonPickerField extends FormField {
                         // keypress right while at end of input
                         // indicating a desire for auto-completion wih the best suggestion
 
-                        this.#setResult(0);
-                        this.#triggerQuery(event.target);
+                        this._setResult(0);
+                        this._triggerQuery(event.target);
                         event.preventDefault();
                     }
                 }
@@ -382,7 +382,7 @@ export class TaxonPickerField extends FormField {
 
                 event.preventDefault();
                 if (this.#searchResults.length && this.#selectedIndex !== null) {
-                    this.#applyResult(event);
+                    this._applyResult(event);
                 } else {
                     const inputEl = document.getElementById(this.#inputFieldId);
                     inputEl.value = '';
@@ -398,7 +398,7 @@ export class TaxonPickerField extends FormField {
      *
      * @param {KeyboardEvent} event
      */
-    #applyResult(event) {
+    _applyResult(event) {
         if (this.#taxonLookupTimeoutHandle) {
             clearTimeout(this.#taxonLookupTimeoutHandle);
             this.#taxonLookupTimeoutHandle = null;
@@ -423,7 +423,7 @@ export class TaxonPickerField extends FormField {
         const currentValue = event.target.value.trimStart(); // save value for testing in InputEvent handler
 
         if (currentValue !== this._lastInputValue) {
-            this.#triggerQuery(event.target);
+            this._triggerQuery(event.target);
         }
     }
 
@@ -431,7 +431,7 @@ export class TaxonPickerField extends FormField {
      *
      * @param {HTMLInputElement} inputEl
      */
-    #triggerQuery(inputEl) {
+    _triggerQuery(inputEl) {
         let text = FormField.cleanRawInput(inputEl);
 
         // Clear previous timeout
@@ -471,7 +471,7 @@ export class TaxonPickerField extends FormField {
             // The focus event will re-fire after click on link in dropdown potentially disrupting subsequent click
             // it is important that the query is not re-run if already focused.
             const inputEl = document.getElementById(this.#inputFieldId);
-            this.#triggerQuery(inputEl);
+            this._triggerQuery(inputEl);
 
             dropDownWrapperEl.classList.add(CSS_DROPDOWN_FOCUSED);
 
@@ -604,7 +604,7 @@ export class TaxonPickerField extends FormField {
         if (targetEl && targetEl.dataset.occurrenceid) {
             event.preventDefault();
 
-            this.#setResult(parseInt(targetEl.dataset.resultnumber));
+            this._setResult(parseInt(targetEl.dataset.resultnumber));
         }
     }
 
@@ -613,7 +613,7 @@ export class TaxonPickerField extends FormField {
      *
      * @param {number} n
      */
-    #setResult(n) {
+    _setResult(n) {
         const result = this.#searchResults[n];
 
         if (result.acceptedEntityId && this.alwaysUseAcceptedName) {
