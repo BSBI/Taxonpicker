@@ -75,6 +75,14 @@ export class TaxonPickerField extends FormField {
      */
     allowTaxonMismatches = false;
 
+    /**
+     * If set (default false) then fire change event, even if the taxon hasn't apparently changed
+     * (used if a page navigation should occur if the selection is activated)
+     *
+     * @type {boolean}
+     */
+    alwaysFireChangeEvent = false;
+
     // /**
     //  *
     //  * @type {boolean}
@@ -633,7 +641,7 @@ export class TaxonPickerField extends FormField {
         }
 
 
-        if (this.#previousId !== this._value.taxonId) {
+        if (this.#previousId !== this._value.taxonId || this.alwaysFireChangeEvent) {
             this.#previousId = this._value.taxonId;
             this.fireEvent(FormField.EVENT_CHANGE);
         }
@@ -740,7 +748,7 @@ export class TaxonPickerField extends FormField {
                 }
             }
 
-            if (this.#previousId !== this._value.taxonId) {
+            if (this.#previousId !== this._value.taxonId || this.alwaysFireChangeEvent) {
                 this.#previousId = this._value.taxonId;
                 this.fireEvent(FormField.EVENT_CHANGE);
             }
