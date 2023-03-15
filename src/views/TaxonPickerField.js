@@ -379,6 +379,11 @@ export class TaxonPickerField extends FormField {
                         event.preventDefault();
                     }
                 }
+                event.stopPropagation(); // on Atlas pages the image gallery mistakenly captures this and blocks default action
+                break;
+
+            case 'ArrowLeft':
+                event.stopPropagation(); // on Atlas pages the image gallery mistakenly captures this and blocks default action
                 break;
 
             case 'Escape':
