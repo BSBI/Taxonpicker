@@ -37,18 +37,6 @@ span.rank-name {
     font-style: normal;
 }
 
-/*
-div.card div.card-invalid-feedback, div.accordion-item div.card-invalid-feedback {
-  display: none;
-}
-
-div.card.is-invalid div.card-invalid-feedback, div.accordion-item.is-invalid div.card-invalid-feedback{
-  display: block;
-  color: red;
-  font-weight: bolder;
-}
- */
-
 div.icon-show-collapsed {
     display: none;
     vertical-align: bottom;

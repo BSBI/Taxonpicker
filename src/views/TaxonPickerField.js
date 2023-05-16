@@ -546,7 +546,8 @@ export class TaxonPickerField extends FormField {
             let n = 0;
             for (let result of this.#searchResults) {
                 let itemId = `taxonitem${this.#dropDownListDivId}_${result.entityId}`;
-                htmlResults[htmlResults.length] = `<a class="list-group-item list-group-item-action" href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}" id="${itemId}">${TaxonSearch.formatter(result)}</a>`;
+                //htmlResults[htmlResults.length] = `<a class="list-group-item list-group-item-action" href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}" id="${itemId}">${TaxonSearch.formatter(result)}</a>`;
+                htmlResults[htmlResults.length] = `<a class="list-group-item list-group-item-action" href="#" data-occurrenceId="${result.entityId}" data-resultnumber="${n}" id="${itemId}">${result.formatted}</a>`;
                 ++n;
             }
 

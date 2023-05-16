@@ -496,15 +496,15 @@ export class TaxonSearch {
 
                     /**
                      * The canonical name may be identical to the nameString in which case JSON taxon list stores
-                     * zero instead to save file space (and to mark that canonical name should be ignored)
+                     * zero or undefined instead to save file space (and to mark that canonical name should be ignored)
                      */
-                    canonical = testTaxon[TaxonSearch.canonicalColumn] === 0 ?
+                    canonical = testTaxon[TaxonSearch.canonicalColumn] ?
                         testTaxon[TaxonSearch.nameStringColumn]
                         :
                         testTaxon[TaxonSearch.canonicalColumn];
 
                     if (exp.test(canonical) ||
-                        ((testTaxon[TaxonSearch.hybridCanonicalColumn] !== '') && exp.test(testTaxon[TaxonSearch.hybridCanonicalColumn]))
+                        ((testTaxon[TaxonSearch.hybridCanonicalColumn]) && exp.test(testTaxon[TaxonSearch.hybridCanonicalColumn]))
                     ) {
                         matchedIds[id] = {
                             exact: allowExact && (testTaxon[TaxonSearch.nameStringColumn] === taxonString),
@@ -549,7 +549,7 @@ export class TaxonSearch {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
                         let testTaxon = Taxon.rawTaxa[id];
 
-                        canonical = testTaxon[TaxonSearch.canonicalColumn] === 0 ?
+                        canonical = testTaxon[TaxonSearch.canonicalColumn] ?
                             testTaxon[TaxonSearch.nameStringColumn]
                             :
                             testTaxon[TaxonSearch.canonicalColumn];
@@ -576,7 +576,7 @@ export class TaxonSearch {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
                         let testTaxon = Taxon.rawTaxa[id];
 
-                        canonical = testTaxon[TaxonSearch.canonicalColumn] === 0 ?
+                        canonical = testTaxon[TaxonSearch.canonicalColumn] ?
                             testTaxon[TaxonSearch.nameStringColumn]
                             :
                             testTaxon[TaxonSearch.canonicalColumn];
@@ -629,7 +629,7 @@ export class TaxonSearch {
                                         exact: allowExact && (testTaxon[TaxonSearch.nameStringColumn] === taxonString)
                                     };
                                 } else if (
-                                    (testTaxon[TaxonSearch.canonicalColumn] !== 0 && broadRegExp.test(testTaxon[TaxonSearch.canonicalColumn])) ||
+                                    (testTaxon[TaxonSearch.canonicalColumn] && broadRegExp.test(testTaxon[TaxonSearch.canonicalColumn])) ||
                                     (!testTaxon[TaxonSearch.badVernacularColumn] && broadVernacularRegExp.test(testTaxon[TaxonSearch.vernacularColumn]))
                                 ) {
                                     matchedIds[id] = {

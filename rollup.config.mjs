@@ -91,7 +91,9 @@ export default [
 				// Undefined by default
 				exclude: ["**/index.html"]
 			}),
-			terser()
+			terser({
+				module: true
+			})
 		]
 	},
 	{
