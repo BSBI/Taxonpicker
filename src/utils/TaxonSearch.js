@@ -498,10 +498,12 @@ export class TaxonSearch {
                      * The canonical name may be identical to the nameString in which case JSON taxon list stores
                      * zero or undefined instead to save file space (and to mark that canonical name should be ignored)
                      */
-                    canonical = testTaxon[TaxonSearch.canonicalColumn] ?
-                        testTaxon[TaxonSearch.nameStringColumn]
-                        :
-                        testTaxon[TaxonSearch.canonicalColumn];
+                    // canonical = testTaxon[TaxonSearch.canonicalColumn] ?
+                    //     testTaxon[TaxonSearch.nameStringColumn]
+                    //     :
+                    //     testTaxon[TaxonSearch.canonicalColumn];
+
+                    let canonical = testTaxon[TaxonSearch.canonicalColumn] || testTaxon[TaxonSearch.nameStringColumn];
 
                     if (exp.test(canonical) ||
                         ((testTaxon[TaxonSearch.hybridCanonicalColumn]) && exp.test(testTaxon[TaxonSearch.hybridCanonicalColumn]))
@@ -549,10 +551,12 @@ export class TaxonSearch {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
                         let testTaxon = Taxon.rawTaxa[id];
 
-                        canonical = testTaxon[TaxonSearch.canonicalColumn] ?
-                            testTaxon[TaxonSearch.nameStringColumn]
-                            :
-                            testTaxon[TaxonSearch.canonicalColumn];
+                        // canonical = testTaxon[TaxonSearch.canonicalColumn] ?
+                        //     testTaxon[TaxonSearch.nameStringColumn]
+                        //     :
+                        //     testTaxon[TaxonSearch.canonicalColumn];
+
+                        let canonical = testTaxon[TaxonSearch.canonicalColumn] || testTaxon[TaxonSearch.nameStringColumn];
 
                         if (
                             canonicalQueryRegExp.test(testTaxon[TaxonSearch.nameStringColumn]) ||
@@ -576,10 +580,12 @@ export class TaxonSearch {
                         // noinspection JSUnfilteredForInLoop (assume is safe for rawTaxa object)
                         let testTaxon = Taxon.rawTaxa[id];
 
-                        canonical = testTaxon[TaxonSearch.canonicalColumn] ?
-                            testTaxon[TaxonSearch.nameStringColumn]
-                            :
-                            testTaxon[TaxonSearch.canonicalColumn];
+                        // canonical = testTaxon[TaxonSearch.canonicalColumn] ?
+                        //     testTaxon[TaxonSearch.nameStringColumn]
+                        //     :
+                        //     testTaxon[TaxonSearch.canonicalColumn];
+
+                        let canonical = testTaxon[TaxonSearch.canonicalColumn] || testTaxon[TaxonSearch.nameStringColumn];
 
                         if (
                             canonicalQueryRegExp.test(testTaxon[TaxonSearch.nameStringColumn]) ||
