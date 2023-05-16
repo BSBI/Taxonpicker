@@ -705,11 +705,11 @@ export class TaxonSearch {
 
                     const row = {
                         entityId: id,
-                        vernacular: taxon[TaxonSearch.vernacularColumn],
+                        vernacular: taxon[TaxonSearch.vernacularColumn] || '',
                         qname,
                         name: qname, // use qualified name for the generic name field
-                        qualifier: taxon[TaxonSearch.qualifierColumn],
-                        authority: taxon[TaxonSearch.authorityColumn],
+                        qualifier: taxon[TaxonSearch.qualifierColumn] || '',
+                        authority: taxon[TaxonSearch.authorityColumn] || '',
                         uname: taxon[TaxonSearch.nameStringColumn],
                         vernacularMatched: matchedIds[id].hasOwnProperty('vernacular') && matchedIds[id].vernacular,
                         exact: matchedIds[id].hasOwnProperty('exact') && matchedIds[id].exact,
